@@ -38,7 +38,25 @@ void DE::defaultFile() {
     object.open("output/"+fileName);
     object << std::setw(62) << "中天廚房設備有限公司\n" << std::setw(60) <<"CHUNG TIN KITCHEN WARES COMPANY LIMITED\n" << std::setw(66) << "香港九龍馬頭角道105號地下\n" << std::setw(64) << " G/F., 105 Ma Tau Kok Road, Kowloon, Hong Kong\n" << std::setw(69) << "電話: (852) 2363 1482  傳真: (852) 2766 1415\n" << std::setw(82) << "機電處註冊氣體工程承辦商號碼 RGC NO.-(682-06)\n" << std::setw(62) << "E-mail: chungtinkitchen@netvigator.com\n";
     object  << std::setw(47) << "報價單\n";
-
+    std::cout << "客戶名稱:\n";
+    std::getline(std::cin,customerName);
+    std::cout << "報價單號碼\n";
+    std::getline(std::cin,quot_num);
+    object << "客戶名稱: " << customerName <<std::setw(60) << "報價單號碼: " <<quot_num << std::endl;
+    std::cout << "客戶地址:\n";
+    std::getline(std::cin, customerAdr);
+    object << "客戶地址: " << customerAdr << std::setw(40) << "Staff: Nicole Wong\n";
+    std::cout << "負責人:\n";
+    std::getline(std::cin,responder);
+    std::cout << "日期：(DD-MM-YYYY)\n";
+    std::getline(std::cin,date);
+    object << "負責人: " << responder << std::setw(60) << "日期： " << date << std::endl;
+    std::cout << "電話:\n";
+    std::cin >> tel;
+    std::cout << "客戶編號:\n";
+    std::cin >> customer_id;
+    object << "電話: " << tel << std::setw(60) << "客戶編號: " << customer_id << std::endl;
+    object << "項目 " << "內容" << std::setw(40) << "數量 " << " 單價" << " 金額" << " 兆焦耳(MJ/HR)\n";
     object.close();
 }
 class Menu {
