@@ -9,7 +9,7 @@
 #include <vector>
 #include <cwchar>
 #include <stddef.h>
-#define underline "\033[4m"
+#include <codecvt>
 void clearUserInput() {
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -19,8 +19,11 @@ class DB{
     public:
         void dataEntry();
         std::string saveFile(std::string fileName);
+        std::wstring saveFile2(std::string fileName);
         void print();
-        std::vector<std::string> dataRelease();
+        std::vector<std::wstring> dataRelease();
+        std::vector<std::string> mjRelease();
+        std::vector<std::string> priceRelease();
 };
 class DE{
     public:
@@ -28,35 +31,66 @@ class DE{
 };
 
 void DE::defaultFile() {
-    //clearUserInput();
+    clearUserInput();
+    std::cout << "Use https://document.online-convert.com/convert-to-pdf to convert txt files to pdf files.\n";
     std::ofstream object;
     std::string fileName, customerName, customerAdr, responder, quot_num, date;
-    int tel, customer_id;
+    std::vector<std::string> vectorItem, vectorPirce,vectorMJ;
+    char quit;
+    int tel, customer_id,count = 1, choice, quantity;
     std::cout << "Please name your file:\n";
     std::getline(std::cin,fileName);
     fileName += ".txt";
-    object.open("output/"+fileName);
-    object << std::setw(62) << "中天廚房設備有限公司\n" << std::setw(60) <<"CHUNG TIN KITCHEN WARES COMPANY LIMITED\n" << std::setw(66) << "香港九龍馬頭角道105號地下\n" << std::setw(64) << " G/F., 105 Ma Tau Kok Road, Kowloon, Hong Kong\n" << std::setw(69) << "電話: (852) 2363 1482  傳真: (852) 2766 1415\n" << std::setw(82) << "機電處註冊氣體工程承辦商號碼 RGC NO.-(682-06)\n" << std::setw(62) << "E-mail: chungtinkitchen@netvigator.com\n";
+    object.open(fileName);
+    object << std::setw(62) << "中天廚房設備有限公司\n" << std::setw(60) <<"CHUNG TIN KITCHEN WARES COMPANY LIMITED\n" << std::setw(66) << "香港九龍馬頭角道105號地下\n" << std::setw(63) << " G/F., 105 Ma Tau Kok Road, Kowloon, Hong Kong\n" << std::setw(68) << "電話: (852) 2363 1482  傳真: (852) 2766 1415\n" << std::setw(81) << "機電處註冊氣體工程承辦商號碼 RGC NO.-(682-06)\n" << std::setw(61) << "E-mail: chungtinkitchen@netvigator.com\n\n\n";
     object  << std::setw(47) << "報價單\n";
-    std::cout << "客戶名稱:\n";
+    std::cout << "Customer's Name:\n";
     std::getline(std::cin,customerName);
-    std::cout << "報價單號碼\n";
+    std::cout << "Quotation Number:\n";
     std::getline(std::cin,quot_num);
-    object << "客戶名稱: " << customerName <<std::setw(60) << "報價單號碼: " <<quot_num << std::endl;
-    std::cout << "客戶地址:\n";
+    object << "客戶名稱: " << customerName <<std::setw(75) << "報價單號碼: " <<quot_num << std::endl;
+    std::cout << "Customer's Address:\n";
     std::getline(std::cin, customerAdr);
-    object << "客戶地址: " << customerAdr << std::setw(40) << "Staff: Nicole Wong\n";
-    std::cout << "負責人:\n";
+    object << "客戶地址: " << customerAdr << std::setw(35) << "Staff: Nicole Wong\n";
+    std::cout << "Responder:\n";
     std::getline(std::cin,responder);
-    std::cout << "日期：(DD-MM-YYYY)\n";
+    std::cout << "Date:(DD-MM-YYYY)\n";
     std::getline(std::cin,date);
-    object << "負責人: " << responder << std::setw(60) << "日期： " << date << std::endl;
-    std::cout << "電話:\n";
+    object << "負責人: " << responder << std::setw(75) << "日期： " << date << std::endl;
+    std::cout << "Tel:\n";
     std::cin >> tel;
-    std::cout << "客戶編號:\n";
+    std::cout << "Customer's ID:\n";
     std::cin >> customer_id;
-    object << "電話: " << tel << std::setw(60) << "客戶編號: " << customer_id << std::endl;
+    object << "電話: " << tel << std::setw(75) << "客戶編號: " << customer_id << std::endl;
     object << "項目 " << "內容" << std::setw(40) << "數量 " << " 單價" << " 金額" << " 兆焦耳(MJ/HR)\n";
+    DB db;
+    db.print();
+    vectorItem = db.dataRelease();
+    vectorPirce = db.priceRelease();
+    vectorMJ = db.mjRelease();
+    while(true){
+        std::cout <<"Enter the number corresponded to the item: " << std::endl;
+        std::cin >> choice;
+        while(true){
+            if(choice >= vectorItem.size()){
+                std::cout << "The range is 1 - " << vectorItem.size() << std::endl;
+                std::cout <<"Enter the number corresponded to the item: " << count << std::endl;
+                std::cin >> choice;
+            } 
+            else {
+                break;
+            }
+        }
+        std::cout << "Quantity: " << std::endl;
+        std::cin >> quantity;
+        object << count << std::setw(20) << vectorItem[choice - 1] << std::setw(20) << quantity << std::setw(20) << quantity * std::stoi(vectorPirce[choice - 1]) << std::setw(20) << vectorPirce[choice - 1] << std::setw(20) << vectorMJ[choice - 1] << "MJ/HR";
+        std::cout << "Press Q to exit and save the file.\n";
+        std::cin >> quit;
+        if(quit == 'Q' || quit == 'q'){
+            break;
+        }
+        ++count;
+    }
     object.close();
 }
 class Menu {
@@ -80,7 +114,8 @@ void Menu::mainMenu() {
         }
     }
     else {
-        return;
+        DE de;
+        de.defaultFile();
     }
 }
 std::string DB::saveFile(std::string fileName) {
@@ -94,23 +129,40 @@ std::string DB::saveFile(std::string fileName) {
     return lines;
 }
 
+
+std::wstring DB::saveFile2(std::string fileName){
+    std::wifstream object;
+    std::wstring lines,save;
+    object.open(fileName);
+    while(object.good()){
+        std::getline(object,save,L'\n');
+        lines = lines + save;
+    }
+    return lines;
+}
+
+
+
 void DB::dataEntry() {
     
     //Saving the files into strings
-    std::string itemString, priceString, MJString,lines,lines2,lines3;
-    itemString = saveFile("Database/Item.txt");
+    std::string priceString, MJString,lines2,lines3;
+    std::wstring str1, lines;
+    str1 = saveFile2("Database/Item.txt");
     priceString = saveFile("Database/price.txt");
     MJString = saveFile("Database/MJ.txt");
 
     //Erasing the files for edit
-    std::ofstream item,price,mj;
+    std::ofstream price,mj;
+    std::wofstream item;
     item.open("Database/Item.txt");
     price.open("Database/price.txt");
     mj.open("Database/MJ.txt");
-
+    item.imbue(std::locale(item.getloc(), new std::codecvt_utf16<wchar_t, 0x10ffff, std::little_endian>()));
     //Appending saved files into new files
-    std::stringstream newLine(itemString), newLine2(priceString), newLine3(MJString);
-    while(std::getline(newLine,lines,',')){
+    std::stringstream newLine2(priceString), newLine3(MJString);
+    std::wistringstream newLine(str1);
+    while(std::getline(newLine,lines,L',')){
         item << lines << ",";
     }
     while(std::getline(newLine2,lines2,',')){
@@ -128,8 +180,8 @@ void DB::dataEntry() {
     while(true){
         clearUserInput();
         std::cout << "Item Name:\n";
-        std::getline(std::cin,itemName);
-        item << itemName << ",";
+        std::wcin >> str1;
+        item << str1 << ",";
         std::cout << "Price:\n";
         std::cin >> Price;
         price << Price << ",";
@@ -149,6 +201,8 @@ void DB::dataEntry() {
 
 void DB::print() {
     std::ifstream object, object2, object3;
+    char something;
+    int count = 1;
     object.open("Database/Item.txt");
     object2.open("Database/price.txt");
     object3.open("Database/MJ.txt");
@@ -158,14 +212,53 @@ void DB::print() {
         getline(object,line,',');
         getline(object2,line2,',');
         getline(object3,line3,',');
-        std::cout << line << std::setw(20)<<  line2 << std::setw(15) <<  line3 << std::endl;
+        std::cout << "Press " << count  << " for: "<< line << std::setw(20)<<  line2 << std::setw(15) <<  line3 << std::endl;
+        ++count;
+    }
+    std::cout << "Press Q to quit\n";
+    std::cin >> something;
+    if(something == 'Q' || something == 'q'){
+        return;
     }
 }
 
+std::vector<std::wstring> DB::dataRelease() {
+    std::wifstream object1;
+    object1.open("Database/Item.txt");
+    std::vector<std::wstring> result;
+    while(object1.good()){
+        std::wstring line;
+        getline(object1,line,L',');
+        result.push_back(line);
+    }
+    return result;
+}
+
+std::vector<std::string> DB::mjRelease() {
+    std::ifstream object1;
+    object1.open("Database/MJ.txt");
+    std::vector<std::string> result;
+    while(object1.good()){
+        std::string mj;
+        getline(object1,mj,',');
+        result.push_back(mj);
+    }
+    return result;
+}
+
+std::vector<std::string> DB::priceRelease() {
+    std::ifstream object1;
+    object1.open("Database/price.txt");
+    std::vector<std::string> result;
+    while(object1.good()){
+        std::string line;
+        getline(object1,line,',');
+        result.push_back(line);
+    }
+    return result;
+}
 int main() {
-    // Menu menu;
-    // menu.mainMenu();
-    DE de;
-    de.defaultFile();
+    Menu menu;
+    menu.mainMenu();
     return 0;
 }
