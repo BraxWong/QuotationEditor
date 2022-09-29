@@ -21,7 +21,7 @@ class DB{
         std::string saveFile(std::string fileName);
         std::wstring saveFile2(std::string fileName);
         void print();
-        std::vector<std::wstring> dataRelease();
+        std::vector<std::string> dataRelease();
         std::vector<std::string> mjRelease();
         std::vector<std::string> priceRelease();
 };
@@ -130,40 +130,25 @@ std::string DB::saveFile(std::string fileName) {
 }
 
 
-std::wstring DB::saveFile2(std::string fileName){
-    std::wifstream object;
-    std::wstring lines,save;
-    object.open(fileName);
-    while(object.good()){
-        std::getline(object,save,L'\n');
-        lines = lines + save;
-    }
-    return lines;
-}
-
-
-
 void DB::dataEntry() {
     
     //Saving the files into strings
-    std::string priceString, MJString,lines2,lines3;
-    std::wstring str1, lines;
-    str1 = saveFile2("Database/Item.txt");
+    std::string itemString, priceString, MJString,line,lines2,lines3;
+
+    itemString = saveFile("Database/Item.txt");
     priceString = saveFile("Database/price.txt");
     MJString = saveFile("Database/MJ.txt");
 
     //Erasing the files for edit
-    std::ofstream price,mj;
-    std::wofstream item;
+    std::ofstream item, price,mj;
     item.open("Database/Item.txt");
     price.open("Database/price.txt");
     mj.open("Database/MJ.txt");
-    item.imbue(std::locale(item.getloc(), new std::codecvt_utf16<wchar_t, 0x10ffff, std::little_endian>()));
+
     //Appending saved files into new files
-    std::stringstream newLine2(priceString), newLine3(MJString);
-    std::wistringstream newLine(str1);
-    while(std::getline(newLine,lines,L',')){
-        item << lines << ",";
+    std::stringstream newLine(itemString),newLine2(priceString), newLine3(MJString);
+    while(std::getline(newLine,line,',')){
+        item << line << ",";
     }
     while(std::getline(newLine2,lines2,',')){
         price << lines2 << ",";
@@ -180,8 +165,8 @@ void DB::dataEntry() {
     while(true){
         clearUserInput();
         std::cout << "Item Name:\n";
-        std::wcin >> str1;
-        item << str1 << ",";
+        std::getline(std::cin,itemName);
+        item << itemName << ",";
         std::cout << "Price:\n";
         std::cin >> Price;
         price << Price << ",";
@@ -222,13 +207,13 @@ void DB::print() {
     }
 }
 
-std::vector<std::wstring> DB::dataRelease() {
-    std::wifstream object1;
+std::vector<std::string> DB::dataRelease() {
+    std::ifstream object1;
     object1.open("Database/Item.txt");
-    std::vector<std::wstring> result;
+    std::vector<std::string> result;
     while(object1.good()){
-        std::wstring line;
-        getline(object1,line,L',');
+        std::string line;
+        getline(object1,line,',');
         result.push_back(line);
     }
     return result;
