@@ -10,6 +10,8 @@
 #include <cwchar>
 #include <stddef.h>
 #include <codecvt>
+#include <stdlib.h>
+#include <stdio.h>
 void clearUserInput() {
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
