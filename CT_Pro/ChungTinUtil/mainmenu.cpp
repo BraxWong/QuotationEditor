@@ -1,11 +1,5 @@
 #include "mainmenu.h"
 
-QFont modFontSize(QFont f, int size)
-{
-    QFont font = f;
-    font.setPointSize(size);
-    return font;
-}
 
 bool mainMenuSetUp(MainWindow **mw)
 {
@@ -62,9 +56,10 @@ bool widgetSetup(MainWindow **mw)
     modifyDataBase->setGeometry(380,160,60,30);
     modifyDataBase->setText("改數據庫");
     modifyDataBase->setFont(modFontSize(quit->font(),10));
-
-
-
+    QObject::connect(modifyDataBase, &QPushButton::clicked,[&]
+    {
+        BUTTONACTIONS_H::modifyDataBase();
+    });
     window->setCentralWidget(qw);
     return true;
 }

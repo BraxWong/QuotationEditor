@@ -20,3 +20,8 @@ bool createNewFile()
     QUOTATIONEDITOR_H::quotationEditorSetup();
     return true;
 }
+
+bool modifyDataBase()
+{
+    return true;
+}
