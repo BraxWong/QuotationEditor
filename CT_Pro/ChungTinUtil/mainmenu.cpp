@@ -22,6 +22,7 @@ bool mainMenuSetUp(MainWindow **mw)
 
 bool widgetSetup(MainWindow **mw)
 {
+    bool actionRan = false;
     MainWindow *window = *mw;
     if(!window->isEnabled())
     {
@@ -36,12 +37,18 @@ bool widgetSetup(MainWindow **mw)
 
     QPushButton *createNewFile = new QPushButton();
     createNewFile->setParent(qw);
-    createNewFile->setGeometry(220,130,60,30);
+    createNewFile->setGeometry(80,160,60,30);
     createNewFile->setText("新報價單");
     createNewFile->setFont(modFontSize(createNewFile->font(),10));
+    QObject::connect(createNewFile, &QPushButton::clicked, [&]
+    {
+        if(actionRan)
+            BUTTONACTIONS_H::createNewFile();
+            actionRan = false;
+    });
 
     QPushButton *quit = new QPushButton();
-    quit->setGeometry(220,190,60,30);
+    quit->setGeometry(230,160,60,30);
     quit->setParent(qw);
     quit->setText("關閉程序");
     quit->setFont(modFontSize(quit->font(),10));
@@ -49,6 +56,15 @@ bool widgetSetup(MainWindow **mw)
     {
         BUTTONACTIONS_H::exitProgram(label,quit,createNewFile,window,qw);
     });
+
+    QPushButton *modifyDataBase = new QPushButton();
+    modifyDataBase->setParent(qw);
+    modifyDataBase->setGeometry(380,160,60,30);
+    modifyDataBase->setText("改數據庫");
+    modifyDataBase->setFont(modFontSize(quit->font(),10));
+
+
+
     window->setCentralWidget(qw);
     return true;
 }

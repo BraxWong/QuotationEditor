@@ -18,7 +18,6 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    MainWindow getWindow() {return this;}
 private:
     Ui::MainWindow *ui;
 };

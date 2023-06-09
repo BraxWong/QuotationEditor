@@ -1,12 +1,22 @@
 #include "buttonactions.h"
 
-bool exitProgram(QLabel *label, QPushButton *quit, QPushButton *createNewFile, MainWindow *window, QWidget *qw)
+void exitProgram(QLabel *label, QPushButton *quit, QPushButton *createNewFile, MainWindow *window, QWidget *qw)
 {
+    qw = nullptr;
     delete qw;
+    window = nullptr;
     delete window;
+    quit = nullptr;
     delete quit;
+    label = nullptr;
     delete label;
+    createNewFile = nullptr;
     delete createNewFile;
     exit(0);
-    return false;
+}
+
+bool createNewFile()
+{
+    QUOTATIONEDITOR_H::quotationEditorSetup();
+    return true;
 }

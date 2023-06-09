@@ -12,12 +12,14 @@ SOURCES += \
     buttonactions.cpp \
     main.cpp \
     mainmenu.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    quotationeditor.cpp
 
 HEADERS += \
     buttonactions.h \
     mainmenu.h \
-    mainwindow.h
+    mainwindow.h \
+    quotationeditor.h
 
 FORMS += \
     mainwindow.ui
