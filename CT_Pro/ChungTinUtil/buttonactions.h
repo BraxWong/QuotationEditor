@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QPushButton>
 #include "quotationeditor.h"
+#include "helpfunctions.h"
 
 //@exitProgram
 //@Param: QLabel *label, QPushButton *quit, QPushButton *createNewFile, MainWindow *window, QWidget *qw

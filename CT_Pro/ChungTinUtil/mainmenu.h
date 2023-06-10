@@ -11,6 +11,7 @@
 #include <QPushButton>
 #include "mainwindow.h"
 #include "buttonactions.h"
+#include "helpfunctions.h"
 
 //@mainMenuSetUp
 //@Description: This is used to set up the main menu

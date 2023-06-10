@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     buttonactions.cpp \
+    helpfunctions.cpp \
     main.cpp \
     mainmenu.cpp \
     mainwindow.cpp \
@@ -17,6 +18,7 @@ SOURCES += \
 
 HEADERS += \
     buttonactions.h \
+    helpfunctions.h \
     mainmenu.h \
     mainwindow.h \
     quotationeditor.h

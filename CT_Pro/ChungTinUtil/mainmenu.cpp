@@ -33,7 +33,7 @@ bool widgetSetup(MainWindow **mw)
     createNewFile->setParent(qw);
     createNewFile->setGeometry(80,160,60,30);
     createNewFile->setText("新報價單");
-    createNewFile->setFont(modFontSize(createNewFile->font(),10));
+    createNewFile->setFont(HELPFUNCTIONS_H::modFontSize(createNewFile->font(),10));
     QObject::connect(createNewFile, &QPushButton::clicked, [&]
     {
         if(actionRan)
@@ -55,7 +55,7 @@ bool widgetSetup(MainWindow **mw)
     modifyDataBase->setParent(qw);
     modifyDataBase->setGeometry(380,160,60,30);
     modifyDataBase->setText("改數據庫");
-    modifyDataBase->setFont(modFontSize(quit->font(),10));
+    modifyDataBase->setFont(HELPFUNCTIONS_H::modFontSize(quit->font(),10));
     QObject::connect(modifyDataBase, &QPushButton::clicked,[&]
     {
         BUTTONACTIONS_H::modifyDataBase();
