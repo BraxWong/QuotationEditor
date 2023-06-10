@@ -64,8 +64,9 @@ bool createNewItems()
 std::string getCurrentDate()
 {
     time_t now = time(0);
-    tm *ltm = localtime(&now);
-    return std::to_string(ltm->tm_mday) + "-" + std::to_string(ltm->tm_mon + 1) + "-" + std::to_string(ltm->tm_year + 1900);
+    tm ltm;
+    localtime_s(&ltm,&now);
+    return std::to_string(ltm.tm_mday) + "-" + std::to_string(ltm.tm_mon + 1) + "-" + std::to_string(ltm.tm_year + 1900);
 }
 
 bool quotationEditorSetup()
@@ -128,7 +129,8 @@ bool quotationWidgetSetup()
     addItems->setFont(modFontSize(addItems->font(),15));
     QObject::connect(addItems,&QPushButton::clicked, [&]
     {
-        createNewItems();
+        getCurrentDate();
+        //createNewItems();
     });
 
     editor->setCentralWidget(wq);
