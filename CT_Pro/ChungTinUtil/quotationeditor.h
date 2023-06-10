@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <ctime>
 #include <QDialog>
+#include <QRadioButton>
 #include "qmenubar.h"
 #include "mainwindow.h"
 #include "helpfunctions.h"
@@ -17,6 +18,6 @@ bool quotationWidgetSetup();
 
 std::string getCurrentDate();
 
-bool createNewItems(QWidget** wq);
+bool createNewItems();
 
 #endif // QUOTATIONEDITOR_H

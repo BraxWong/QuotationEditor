@@ -5,36 +5,59 @@ QLabel* fileNameLabel, *customerNameLabel, *customerAddrLabel, *supervisorLabel,
 QWidget* wq;
 QPushButton* submit, *addItems;
 
-bool createNewItems(QWidget** wq)
+bool createNewItems()
 {
 
     QDialog* popUp = new QDialog();
     popUp->setWindowTitle("Adding New Items");
     popUp->show();
-    QWidget *widget = *wq;
+
     QLineEdit* productName = new QLineEdit(popUp);
     QLabel* productNameLabel = new QLabel("產品名稱",popUp);
     HELPFUNCTIONS_H::widgetConfigForPopUp(&productName,&productNameLabel,100,20,50,23,200,100,50,100);
 
-    QLineEdit* quantity = new QLineEdit();
-    QLabel* quantityLabel = new QLabel();
-    quantity->setParent(widget);
-    QLineEdit* pricePerUnit = new QLineEdit();
-    QLabel* pricePerUnitLabel = new QLabel();
-    pricePerUnit->setParent(widget);
-    QLineEdit* MJHR = new QLineEdit();
-    QLabel* MJHRLabel = new QLabel();
-    MJHR->setParent(widget);
-    QLineEdit* model = new QLineEdit();
-    QLabel* modelLabel = new QLabel();
-    model->setParent(widget);
-    QLineEdit* size = new QLineEdit();
-    QLabel* sizeLabel = new QLabel();
-    size->setParent(widget);
-    QMenu* discount = new QMenu("Discount");
-    discount->setParent(widget);
-    QAction* applied = discount->addAction("Yes");
-    QAction* nApplied = discount->addAction("No");
+    QLineEdit* quantity = new QLineEdit(popUp);
+    QLabel* quantityLabel = new QLabel("數量",popUp);
+    HELPFUNCTIONS_H::widgetConfigForPopUp(&quantity,&quantityLabel,100,20,120,90,200,100,50,100);
+
+    QLineEdit* pricePerUnit = new QLineEdit(popUp);
+    QLabel* pricePerUnitLabel = new QLabel("單價",popUp);
+    HELPFUNCTIONS_H::widgetConfigForPopUp(&pricePerUnit,&pricePerUnitLabel,100,20,190,160,200,100,50,100);
+
+    QLineEdit* MJHR = new QLineEdit(popUp);
+    QLabel* MJHRLabel = new QLabel("兆焦耳",popUp);
+    HELPFUNCTIONS_H::widgetConfigForPopUp(&MJHR,&MJHRLabel,100,20,260,230,200,100,50,100);
+
+    QLineEdit* model = new QLineEdit(popUp);
+    QLabel* modelLabel = new QLabel("模型",popUp);
+    HELPFUNCTIONS_H::widgetConfigForPopUp(&model,&modelLabel,100,20,330,300,200,100,50,100);
+
+    QLineEdit* dimensions = new QLineEdit(popUp);
+    QLabel* dimensionsLabel = new QLabel("尺寸",popUp);
+    HELPFUNCTIONS_H::widgetConfigForPopUp(&dimensions,&dimensionsLabel,100,20,400,370,200,100,50,100);
+
+    QRadioButton* discount = new QRadioButton("Yes",popUp);
+    discount->setGeometry(400,50,100,100);
+    discount->setEnabled(true);
+    discount->show();
+
+    QRadioButton* discounted = new QRadioButton("No",popUp);
+    discounted->setGeometry(550,50,100,100);
+    discounted->setEnabled(true);
+    discounted->show();
+
+    QLabel* discountLabel = new QLabel("香港中華煤氣有限公司(尊貴客戶)優惠",popUp);
+    discountLabel->setGeometry(385,0,300,300);
+    discountLabel->setFont(modFontSize(discountLabel->font(),10));
+    discountLabel->show();
+
+    QPushButton* complete = new QPushButton("完成",popUp);
+    complete->setGeometry(475,180,40,40);
+    complete->setFont(modFontSize(complete->font(),10));
+    complete->show();
+    QObject::connect(complete, &QPushButton::clicked,[&]{
+
+    });
     return true;
 }
 
@@ -105,7 +128,7 @@ bool quotationWidgetSetup()
     addItems->setFont(modFontSize(addItems->font(),15));
     QObject::connect(addItems,&QPushButton::clicked, [&]
     {
-        createNewItems(&wq);
+        createNewItems();
     });
 
     editor->setCentralWidget(wq);

@@ -9,6 +9,7 @@
 #include <QFont>
 #include <QVBoxLayout>
 #include <QPushButton>
+#include <QRadioButton>
 #include "mainwindow.h"
 #include "buttonactions.h"
 #include "helpfunctions.h"
