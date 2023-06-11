@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     buttonactions.cpp \
+    customerDetails.cpp \
     helpfunctions.cpp \
     main.cpp \
     mainmenu.cpp \
@@ -18,6 +19,7 @@ SOURCES += \
 
 HEADERS += \
     buttonactions.h \
+    customerDetails.h \
     helpfunctions.h \
     mainmenu.h \
     mainwindow.h \

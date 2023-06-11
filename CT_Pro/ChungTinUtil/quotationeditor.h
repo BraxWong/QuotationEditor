@@ -10,12 +10,19 @@
 #include "qmenubar.h"
 #include "mainwindow.h"
 #include "helpfunctions.h"
+#include "customerDetails.h"
 
-
+//@quotationEditorSetup()
+//@Descriptions: Set up the quotation editor screen.
 bool quotationEditorSetup();
 
+//@quotationWidgetSetup()
+//@Descriptions: Set up all the widgets for the quotation editor screen
 bool quotationWidgetSetup();
 
+//@getCurrentDate()
+//@Descriptions: Uses localtime_s() to get the current date (DD-MM-YYYY)
+//@Return: The date in type string
 std::string getCurrentDate();
 
 bool createNewItems();

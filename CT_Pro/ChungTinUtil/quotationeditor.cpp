@@ -4,7 +4,7 @@ QLineEdit* fileName, *customerName, *customerAddr, *supervisor, *customerTel, *c
 QLabel* fileNameLabel, *customerNameLabel, *customerAddrLabel, *supervisorLabel, *customerTelLabel, *customerIDLabel, *quotationIDLabel, *staffLabel;
 QWidget* wq;
 QPushButton* submit, *addItems;
-
+customerDetails* details;
 bool createNewItems()
 {
 
@@ -72,7 +72,7 @@ std::string getCurrentDate()
 bool quotationEditorSetup()
 {
     editor = new MainWindow();
-    editor->setAttribute(Qt::WA_DeleteOnClose);  // Set the delete on close attribute
+    editor->setAttribute(Qt::WA_DeleteOnClose);
     editor->setFixedSize(800,800);
     editor->setWindowTitle("編輯程序");
     quotationWidgetSetup();
@@ -121,6 +121,12 @@ bool quotationWidgetSetup()
     submit->setParent(wq);
     submit->setGeometry(380,500,50,50);
     submit->setFont(modFontSize(submit->font(),15));
+    QObject::connect(submit,&QPushButton::clicked, [&]{
+        //std::string cName, std::string cAddr, std::string supe, std::string qID, std::string sName, std::string fName, int cTel, int cID
+        details = new customerDetails(customerName->text().toStdString(),customerAddr->text().toStdString(),supervisor->text().toStdString(),
+                                      quotationID->text().toStdString(),staff->text().toStdString(),fileName->text().toStdString(),
+                                      std::stoi(customerTel->text().toStdString()),std::stoi(customerID->text().toStdString()));
+    });
 
     addItems = new QPushButton();
     addItems->setText("添加項目");
@@ -129,8 +135,7 @@ bool quotationWidgetSetup()
     addItems->setFont(modFontSize(addItems->font(),15));
     QObject::connect(addItems,&QPushButton::clicked, [&]
     {
-        getCurrentDate();
-        //createNewItems();
+        createNewItems();
     });
 
     editor->setCentralWidget(wq);
