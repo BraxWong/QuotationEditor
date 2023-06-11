@@ -1,62 +1,82 @@
 #include "quotationeditor.h"
 MainWindow* editor;
-QLineEdit* fileName, *customerName, *customerAddr, *supervisor, *customerTel, *customerID, *quotationID, *staff;
-QLabel* fileNameLabel, *customerNameLabel, *customerAddrLabel, *supervisorLabel, *customerTelLabel, *customerIDLabel, *quotationIDLabel, *staffLabel;
+QLineEdit* fileName, *customerName, *customerAddr, *supervisor, *customerTel, *customerID, *quotationID, *staff, *productName, *quantity, *pricePerUnit, *MJHR, *model,
+    *dimensionsX, *dimensionsY, *dimensionsZ;
+QLabel* fileNameLabel, *customerNameLabel, *customerAddrLabel, *supervisorLabel,
+    *customerTelLabel, *customerIDLabel, *quotationIDLabel, *staffLabel, *productNameLabel, *quantityLabel, *pricePerUnitLabel, *MJHRLabel, *modelLabel,
+    *dimensionsLabel, *dimensionsLabel2, *dimensionsLabel3, *discountLabel;
 QWidget* wq;
-QPushButton* submit, *addItems;
+QPushButton* submit, *addItems, *complete;
+QDialog* popUp;
+QRadioButton* discount, *discounted;
 customerDetails* details;
+std::vector<entry*> entries;
+entry* e;
 bool createNewItems()
 {
-
-    QDialog* popUp = new QDialog();
+    popUp = new QDialog();
     popUp->setWindowTitle("Adding New Items");
     popUp->show();
+    popUp->setAttribute(Qt::WA_DeleteOnClose);
 
-    QLineEdit* productName = new QLineEdit(popUp);
-    QLabel* productNameLabel = new QLabel("產品名稱",popUp);
+    productName = new QLineEdit(popUp);
+    productNameLabel = new QLabel("產品名稱",popUp);
     HELPFUNCTIONS_H::widgetConfigForPopUp(&productName,&productNameLabel,100,20,50,23,200,100,50,100);
 
-    QLineEdit* quantity = new QLineEdit(popUp);
-    QLabel* quantityLabel = new QLabel("數量",popUp);
+    quantity = new QLineEdit(popUp);
+    quantityLabel = new QLabel("數量",popUp);
     HELPFUNCTIONS_H::widgetConfigForPopUp(&quantity,&quantityLabel,100,20,120,90,200,100,50,100);
 
-    QLineEdit* pricePerUnit = new QLineEdit(popUp);
-    QLabel* pricePerUnitLabel = new QLabel("單價",popUp);
+    pricePerUnit = new QLineEdit(popUp);
+    pricePerUnitLabel = new QLabel("單價",popUp);
     HELPFUNCTIONS_H::widgetConfigForPopUp(&pricePerUnit,&pricePerUnitLabel,100,20,190,160,200,100,50,100);
 
-    QLineEdit* MJHR = new QLineEdit(popUp);
-    QLabel* MJHRLabel = new QLabel("兆焦耳",popUp);
+    MJHR = new QLineEdit(popUp);
+    MJHRLabel = new QLabel("兆焦耳",popUp);
     HELPFUNCTIONS_H::widgetConfigForPopUp(&MJHR,&MJHRLabel,100,20,260,230,200,100,50,100);
 
-    QLineEdit* model = new QLineEdit(popUp);
-    QLabel* modelLabel = new QLabel("模型",popUp);
+    model = new QLineEdit(popUp);
+    modelLabel = new QLabel("模型",popUp);
     HELPFUNCTIONS_H::widgetConfigForPopUp(&model,&modelLabel,100,20,330,300,200,100,50,100);
 
-    QLineEdit* dimensions = new QLineEdit(popUp);
-    QLabel* dimensionsLabel = new QLabel("尺寸",popUp);
-    HELPFUNCTIONS_H::widgetConfigForPopUp(&dimensions,&dimensionsLabel,100,20,400,370,200,100,50,100);
+    dimensionsX = new QLineEdit(popUp);
+    dimensionsY = new QLineEdit(popUp);
+    dimensionsZ = new QLineEdit(popUp);
+    dimensionsLabel = new QLabel("尺寸",popUp);
+    dimensionsLabel2 = new QLabel("X",popUp);
+    dimensionsLabel3 = new QLabel("X",popUp);
+    HELPFUNCTIONS_H::widgetConfigForPopUp(&dimensionsX,&dimensionsLabel,100,20,400,375,50,100,50,100);
+    HELPFUNCTIONS_H::widgetConfigForPopUp(&dimensionsY,&dimensionsLabel2,200,170,400,370,50,100,50,100);
+    HELPFUNCTIONS_H::widgetConfigForPopUp(&dimensionsZ,&dimensionsLabel3,300,270,400,370,50,100,50,100);
 
-    QRadioButton* discount = new QRadioButton("Yes",popUp);
+    discount = new QRadioButton("Yes",popUp);
     discount->setGeometry(400,50,100,100);
-    discount->setEnabled(true);
     discount->show();
 
-    QRadioButton* discounted = new QRadioButton("No",popUp);
+    discounted = new QRadioButton("No",popUp);
     discounted->setGeometry(550,50,100,100);
-    discounted->setEnabled(true);
     discounted->show();
 
-    QLabel* discountLabel = new QLabel("香港中華煤氣有限公司(尊貴客戶)優惠",popUp);
+    discountLabel = new QLabel("香港中華煤氣有限公司(尊貴客戶)優惠",popUp);
     discountLabel->setGeometry(385,0,300,300);
     discountLabel->setFont(modFontSize(discountLabel->font(),10));
     discountLabel->show();
 
-    QPushButton* complete = new QPushButton("完成",popUp);
+    complete = new QPushButton("完成",popUp);
     complete->setGeometry(475,180,40,40);
     complete->setFont(modFontSize(complete->font(),10));
     complete->show();
     QObject::connect(complete, &QPushButton::clicked,[&]{
-
+        bool checked = false;
+        //std::string pName, std::string modelName, std::string pDimensionsX, std::string pDimensionsY, std::string pDimensionsZ, int quant, int price, double MH, bool D
+        if(discount->isChecked())
+            checked = true;
+        std::cout << discount->isChecked();
+        e = new entry(productName->text().toStdString(),model->text().toStdString(),
+                             dimensionsX->text().toStdString(),dimensionsY->text().toStdString(), dimensionsZ->text().toStdString(),
+                             std::stoi(quantity->text().toStdString()), std::stoi(pricePerUnit->text().toStdString()), std::stod(MJHR->text().toStdString()),checked);
+        entries.push_back(e);
+        popUp->close();
     });
     return true;
 }
@@ -122,10 +142,15 @@ bool quotationWidgetSetup()
     submit->setGeometry(380,500,50,50);
     submit->setFont(modFontSize(submit->font(),15));
     QObject::connect(submit,&QPushButton::clicked, [&]{
-        //std::string cName, std::string cAddr, std::string supe, std::string qID, std::string sName, std::string fName, int cTel, int cID
-        details = new customerDetails(customerName->text().toStdString(),customerAddr->text().toStdString(),supervisor->text().toStdString(),
-                                      quotationID->text().toStdString(),staff->text().toStdString(),fileName->text().toStdString(),
-                                      std::stoi(customerTel->text().toStdString()),std::stoi(customerID->text().toStdString()));
+        if(entries.size() != 0)
+            details = new customerDetails(customerName->text().toStdString(),customerAddr->text().toStdString(),supervisor->text().toStdString(),
+                                          quotationID->text().toStdString(),staff->text().toStdString(),fileName->text().toStdString(),
+                                          std::stoi(customerTel->text().toStdString()),std::stoi(customerID->text().toStdString()));
+        for(int i = 0; i < entries.size(); ++i)
+        {
+            std::cout << entries[i]->entryToString() << "\n";
+        }
+        editor->close();
     });
 
     addItems = new QPushButton();

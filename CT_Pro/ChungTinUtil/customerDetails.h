@@ -7,12 +7,18 @@
 class customerDetails
 {
 public:
+
+    //Constructor
     customerDetails(std::string cName, std::string cAddr, std::string supe, std::string qID, std::string sName, std::string fName, int cTel, int cID)
         :customerName(cName),customerAddr(cAddr), supervisor(supe), quotationID(qID), staffName(sName), customerTel(cTel), customerID(cID)
     {
         setFileName(fName);
     }
 
+    //@setFileName()
+    //@Param: std::string fName"
+    //@Descriptions: Will check if the name of the file ends with ".csv". If not it will append ".csv" to the end of the string
+    //               then store it in fileName variable.
     void setFileName(std::string fName);
     std::string getCustomerName() {return customerName;}
     std::string getCustomerAddr() {return customerAddr;}

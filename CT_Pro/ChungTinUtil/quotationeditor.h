@@ -11,6 +11,7 @@
 #include "mainwindow.h"
 #include "helpfunctions.h"
 #include "customerDetails.h"
+#include "entry.h"
 
 //@quotationEditorSetup()
 //@Descriptions: Set up the quotation editor screen.
