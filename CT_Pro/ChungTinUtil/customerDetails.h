@@ -3,7 +3,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <string>
 class customerDetails
 {
 public:
@@ -26,6 +26,9 @@ public:
     std::string getQuotationID() {return quotationID;}
     std::string getStaffName() {return staffName;}
     std::string getfileName() {return fileName;}
+    std::string customerDetailsToString() {return getCustomerName() + "\n" + getCustomerAddr() + "\n" + getSupervisor() +
+                                           "\n" + getQuotationID() + "\n" + getStaffName() + "\n" + getfileName() + "\n"
+                                           + std::to_string(getCustomerTel()) + "\n" + std::to_string(getCustomerID()) + "\n"; }
     int getCustomerTel() {return customerTel;}
     int getCustomerID() {return customerID;}
     ~customerDetails();

@@ -1,23 +1,30 @@
 #include "quotationeditor.h"
+#include "mainwindow.h"
+#include "helpfunctions.h"
+#include "customerDetails.h"
+#include "entry.h"
+#include "buttonactions.h"
+
 MainWindow* editor;
 QLineEdit* fileName, *customerName, *customerAddr, *supervisor, *customerTel, *customerID, *quotationID, *staff, *productName, *quantity, *pricePerUnit, *MJHR, *model,
-    *dimensionsX, *dimensionsY, *dimensionsZ;
+    *dimensionsX, *dimensionsY, *dimensionsZ, *discount;
 QLabel* fileNameLabel, *customerNameLabel, *customerAddrLabel, *supervisorLabel,
     *customerTelLabel, *customerIDLabel, *quotationIDLabel, *staffLabel, *productNameLabel, *quantityLabel, *pricePerUnitLabel, *MJHRLabel, *modelLabel,
     *dimensionsLabel, *dimensionsLabel2, *dimensionsLabel3, *discountLabel;
 QWidget* wq;
 QPushButton* submit, *addItems, *complete;
 QDialog* popUp;
-QRadioButton* discount, *discounted;
 customerDetails* details;
 std::vector<entry*> entries;
 entry* e;
+
 bool createNewItems()
 {
     popUp = new QDialog();
     popUp->setWindowTitle("Adding New Items");
     popUp->show();
     popUp->setAttribute(Qt::WA_DeleteOnClose);
+    popUp->setFixedSize(700,500);
 
     productName = new QLineEdit(popUp);
     productNameLabel = new QLabel("產品名稱",popUp);
@@ -49,45 +56,26 @@ bool createNewItems()
     HELPFUNCTIONS_H::widgetConfigForPopUp(&dimensionsY,&dimensionsLabel2,200,170,400,370,50,100,50,100);
     HELPFUNCTIONS_H::widgetConfigForPopUp(&dimensionsZ,&dimensionsLabel3,300,270,400,370,50,100,50,100);
 
-    discount = new QRadioButton("Yes",popUp);
-    discount->setGeometry(400,50,100,100);
-    discount->show();
-
-    discounted = new QRadioButton("No",popUp);
-    discounted->setGeometry(550,50,100,100);
-    discounted->show();
-
+    discount = new QLineEdit(popUp);
     discountLabel = new QLabel("香港中華煤氣有限公司(尊貴客戶)優惠",popUp);
-    discountLabel->setGeometry(385,0,300,300);
-    discountLabel->setFont(modFontSize(discountLabel->font(),10));
-    discountLabel->show();
+    HELPFUNCTIONS_H::widgetConfigForPopUp(&discount,&discountLabel,420,385,180,0,200,300,50,300);
 
     complete = new QPushButton("完成",popUp);
-    complete->setGeometry(475,180,40,40);
+    complete->setGeometry(500,250,40,40);
     complete->setFont(modFontSize(complete->font(),10));
     complete->show();
     QObject::connect(complete, &QPushButton::clicked,[&]{
-        bool checked = false;
-        //std::string pName, std::string modelName, std::string pDimensionsX, std::string pDimensionsY, std::string pDimensionsZ, int quant, int price, double MH, bool D
-        if(discount->isChecked())
-            checked = true;
-        std::cout << discount->isChecked();
         e = new entry(productName->text().toStdString(),model->text().toStdString(),
-                             dimensionsX->text().toStdString(),dimensionsY->text().toStdString(), dimensionsZ->text().toStdString(),
-                             std::stoi(quantity->text().toStdString()), std::stoi(pricePerUnit->text().toStdString()), std::stod(MJHR->text().toStdString()),checked);
+                      dimensionsX->text().toStdString(),dimensionsY->text().toStdString(), dimensionsZ->text().toStdString(),
+                      std::stoi(quantity->text().toStdString()), std::stoi(pricePerUnit->text().toStdString()), std::stod(MJHR->text().toStdString()),
+                      std::stoi(discount->text().toStdString()));
         entries.push_back(e);
         popUp->close();
     });
     return true;
 }
 
-std::string getCurrentDate()
-{
-    time_t now = time(0);
-    tm ltm;
-    localtime_s(&ltm,&now);
-    return std::to_string(ltm.tm_mday) + "-" + std::to_string(ltm.tm_mon + 1) + "-" + std::to_string(ltm.tm_year + 1900);
-}
+
 
 bool quotationEditorSetup()
 {
@@ -143,12 +131,11 @@ bool quotationWidgetSetup()
     submit->setFont(modFontSize(submit->font(),15));
     QObject::connect(submit,&QPushButton::clicked, [&]{
         if(entries.size() != 0)
+        {
             details = new customerDetails(customerName->text().toStdString(),customerAddr->text().toStdString(),supervisor->text().toStdString(),
                                           quotationID->text().toStdString(),staff->text().toStdString(),fileName->text().toStdString(),
                                           std::stoi(customerTel->text().toStdString()),std::stoi(customerID->text().toStdString()));
-        for(int i = 0; i < entries.size(); ++i)
-        {
-            std::cout << entries[i]->entryToString() << "\n";
+            BUTTONACTIONS_H::appendToFile(details,entries);
         }
         editor->close();
     });

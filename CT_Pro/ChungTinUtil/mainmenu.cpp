@@ -1,5 +1,6 @@
 #include "mainmenu.h"
-
+#include "buttonactions.h"
+#include "helpfunctions.h"
 
 bool mainMenuSetUp(MainWindow **mw)
 {

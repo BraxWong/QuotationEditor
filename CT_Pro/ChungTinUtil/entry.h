@@ -8,9 +8,9 @@
 class entry
 {
 public:
-    entry(std::string pName, std::string modelName, std::string pDimensionsX, std::string pDimensionsY, std::string pDimensionsZ, int quant, int price, double MH, bool D)
-        :productName(pName), quantity(quant),pricePerUnit(price),MJHR(MH),model(modelName),
-        dimensionsX(pDimensionsX),dimensionsY(pDimensionsY),dimensionsZ(pDimensionsZ),discount(D)
+    entry(std::string pName, std::string modelName, std::string pDimensionsX, std::string pDimensionsY, std::string pDimensionsZ, int quant, int price, double MH, int D)
+        :productName(pName), quantity(quant),pricePerUnit(price),discount(D),MJHR(MH),
+        model(modelName),dimensionsX(pDimensionsX),dimensionsY(pDimensionsY),dimensionsZ(pDimensionsZ)
     {
 
     }
@@ -30,17 +30,18 @@ public:
     int getTotalPrice() {return totalPrice;}
     void setTotalPrice() {totalPrice = pricePerUnit * quantity;}
     double getMJHR() {return MJHR;}
-    bool getDiscount() {return discount;}
+    int getDiscount() {return discount;}
 
 private:
     std::string productName;
     int quantity;
     int pricePerUnit;
     int totalPrice;
+    int discount;
     double MJHR;
     std::string model;
     std::string dimensionsX, dimensionsY, dimensionsZ;
-    bool discount;
+
 };
 
 #endif // ENTRY_H

@@ -4,8 +4,9 @@
 #include <QLabel>
 #include <QWidget>
 #include <QPushButton>
-#include "quotationeditor.h"
-#include "helpfunctions.h"
+#include <fstream>
+#include "customerDetails.h"
+#include "entry.h"
 
 //@exitProgram
 //@Param: QLabel *label, QPushButton *quit, QPushButton *createNewFile, MainWindow *window, QWidget *qw
@@ -20,5 +21,8 @@ bool createNewFile();
 
 //@modifyDataBase
 bool modifyDataBase();
+
+//@appendToFile
+bool appendToFile(customerDetails* details, std::vector<entry*> entries);
 
 #endif // BUTTONACTIONS_H
