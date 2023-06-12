@@ -37,10 +37,10 @@ bool appendToFile(customerDetails* details, std::vector<entry*> entries)
     quotationFile.open(HELPFUNCTIONS_H::get_desktop_path() + "/" +details->getfileName(),std::ios::out | std::ios::binary);
     quotationFile << '\xEF' << '\xBB' << '\xBF';
     //For header and customer details
-    quotationFile << HELPFUNCTIONS_H::centerText("中天廚房設備有限公司",20) << "\r\n" << HELPFUNCTIONS_H::centerText("CHUNG TIN KITCHEN WARES COMPANY LIMITED",100)
-                  << "\r\n" << HELPFUNCTIONS_H::centerText("香港九龍馬頭角道105號地下",20) << "\r\n" << HELPFUNCTIONS_H::centerText("G/F 105 Ma Tau Kok Road Kowloon Hong Kong",50)
-                  << "\r\n" << HELPFUNCTIONS_H::centerText("電話: (852) 2363 1482  傳真: (852) 2766 1415", 50) << "\r\n" << HELPFUNCTIONS_H::centerText("機電處註冊氣體工程承辦商號碼 RGC NO.-(682-06)",50)
-                  << "\r\n" << HELPFUNCTIONS_H::centerText("E-mail: chungtinkitchen@netvigator.com", 100) << "\r\n" << HELPFUNCTIONS_H::centerText("報價單",400) << "\r\n" << "客戶名稱:"
+    quotationFile << HELPFUNCTIONS_H::centerText("中天廚房設備有限公司",160) << "\r\n" << HELPFUNCTIONS_H::centerText("CHUNG TIN KITCHEN WARES COMPANY LIMITED",150)
+                  << "\r\n" << HELPFUNCTIONS_H::centerText("香港九龍馬頭角道105號地下", 156) << "\r\n" << HELPFUNCTIONS_H::centerText("G/F 105 Ma Tau Kok Road Kowloon Hong Kong", 158)
+                  << "\r\n" << HELPFUNCTIONS_H::centerText("電話: (852) 2363 1482  傳真: (852) 2766 1415", 157) << "\r\n" << HELPFUNCTIONS_H::centerText("機電處註冊氣體工程承辦商號碼 RGC NO.-(682-06)",157)
+                  << "\r\n" << HELPFUNCTIONS_H::centerText("E-mail: chungtinkitchen@netvigator.com", 157) << "\r\n" << HELPFUNCTIONS_H::centerText("報價單",145) << "\r\n" << "  客戶名稱:"
                   << ',' << details->getCustomerName() << ",,," << "報價單號碼：" << "," << details->getQuotationID() << "\r\n" << "客戶地址:" << "," << details->getCustomerAddr() << ",,," << "Staff"
                   << "," << details->getStaffName() << "\r\n" << "負責人:" << "," << details->getSupervisor() << ",,," << "日期:" << "," << HELPFUNCTIONS_H::getCurrentDate() << "\r\n"
                   << "電話 :" << "," << std::to_string(details->getCustomerTel()) << "\r\n" << "客戶編號:" << "," << std::to_string(details->getCustomerID()) << "\r\n"
