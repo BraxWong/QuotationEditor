@@ -9,6 +9,8 @@ QFont modFontSize(QFont f, int size)
 }
 
 
+
+
 void widgetConfig(QWidget* wq, QLineEdit** input, QLabel** label, QString name, int x, int x1, int y, int y1, int width, int width1, int height, int height1)
 {
     QLineEdit* line = *input;
@@ -71,4 +73,26 @@ std::string getCurrentDate()
     tm ltm;
     localtime_s(&ltm,&now);
     return std::to_string(ltm.tm_mday) + "-" + std::to_string(ltm.tm_mon + 1) + "-" + std::to_string(ltm.tm_year + 1900);
+}
+
+libxl::Sheet* insertPicture(libxl::Book** book, std::string pictureFile, int row, int column)
+{
+    libxl::Book* newBook = *book;
+
+    const std::string pic = pictureFile;
+    std::wstring wstr(pictureFile.begin(), pictureFile.end());
+    int id = newBook->addPicture(wstr.c_str());
+
+    if (id == -1)
+    {
+        std::cout << "picture not found" << std::endl;
+        return nullptr;
+    }
+    libxl::Sheet* sheet = newBook->addSheet(L"Sheet1");
+    if (sheet)
+    {
+        sheet->setPicture(row, column, id);
+        return sheet;
+    }
+    return nullptr;
 }
