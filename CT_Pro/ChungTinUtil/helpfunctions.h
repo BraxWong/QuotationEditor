@@ -6,11 +6,16 @@
 #include <windows.h>
 #include <shlobj.h>
 #include <objbase.h>
+#include <stdio.h>
+#include <iostream>
+#include <stdlib.h>
 
 #pragma comment(lib,"Shell32")
 #pragma comment(lib,"Ole32")
 #include "QLineEdit"
 #include "QLabel"
+#include "libxl.h"
+
 
 void widgetConfig(QWidget* wq, QLineEdit** input, QLabel** label, QString name, int x, int x1, int y, int y1, int width, int width1, int height, int height1);
 
@@ -32,4 +37,6 @@ std::string centerText(const std::string& text, int width);
 //@Return: The date in type string
 std::string getCurrentDate();
 
+
+libxl::Sheet* insertPicture(libxl::Book** book, std::string pictureFile, int row, int column);
 #endif // HELPFUNCTIONS_H
