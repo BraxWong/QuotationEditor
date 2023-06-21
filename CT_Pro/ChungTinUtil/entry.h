@@ -5,42 +5,41 @@
 #include <stdio.h>
 #include <string>
 
+//TODO: Model has to be divided into 2 parts. Model name and approval number. Approval number can be empty.
 class entry
 {
 public:
-    entry(std::string pName, std::string modelName, std::string pDimensionsX, std::string pDimensionsY, std::string pDimensionsZ, int quant, int price, double MH, int D)
-        :productName(pName), quantity(quant),pricePerUnit(price),discount(D),MJHR(MH),
-        model(modelName),dimensionsX(pDimensionsX),dimensionsY(pDimensionsY),dimensionsZ(pDimensionsZ)
+    entry(std::wstring ao,std::wstring pName, std::wstring modelName, std::string pDimensionsX, std::string pDimensionsY, std::string pDimensionsZ, std::wstring approveNum, int quant, int price, float MH, int D)
+        :addOn(ao),productName(pName), quantity(quant),pricePerUnit(price),discount(D),MJHR(MH),
+        model(modelName),dimensionsX(pDimensionsX),dimensionsY(pDimensionsY),dimensionsZ(pDimensionsZ),approvalNumber(approveNum)
     {
-
+        MJHR = floor(MJHR * 100) / 100;
     }
 
-    std::string getProductName() {return productName;}
-    std::string getModel() {return model;}
+    std::wstring getProductName() {return productName;}
+    std::wstring getModel() {return model;}
     std::string getDimensionsX() {return dimensionsX;}
     std::string getDimensionsY() {return dimensionsY;}
     std::string getDimensionsZ() {return dimensionsZ;}
-    std::string entryToString() {return getProductName() + "\n" + getModel() + "\n" + getDimensionsX() + "\n" +
-                                        getDimensionsY() + "\n" + getDimensionsZ() + "\n" + std::to_string(getQuantity()) + "\n"
-                                        + std::to_string(getPricePerUnit()) + "\n" + std::to_string(getMJHR()) + "\n" +
-                                        std::to_string(getDiscount()) + "\n";
-    }
+    std::wstring getApprovalNumber() { return approvalNumber; }
+    std::wstring getAddOn() { return addOn; }
     int getQuantity() {return quantity;}
     int getPricePerUnit() {return pricePerUnit;}
     int getTotalPrice() {return totalPrice;}
     void setTotalPrice() {totalPrice = pricePerUnit * quantity;}
-    double getMJHR() {return MJHR;}
+    float getMJHR() {return MJHR;}
     int getDiscount() {return discount;}
 
 private:
-    std::string productName;
+    std::wstring productName, addOn;
     int quantity;
     int pricePerUnit;
     int totalPrice;
     int discount;
-    double MJHR;
-    std::string model;
+    float MJHR;
+    std::wstring model;
     std::string dimensionsX, dimensionsY, dimensionsZ;
+    std::wstring approvalNumber;
 
 };
 
