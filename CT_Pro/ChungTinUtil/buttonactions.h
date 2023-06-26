@@ -7,6 +7,9 @@
 #include <fstream>
 #include "customerDetails.h"
 #include "entry.h"
+#include "libxl.h"
+
+using namespace libxl;
 
 //@exitProgram
 //@Param: QLabel *label, QPushButton *quit, QPushButton *createNewFile, MainWindow *window, QWidget *qw
@@ -23,6 +26,9 @@ bool createNewFile();
 bool modifyDataBase();
 
 //@appendToFile
+//bool appendToFile(Book** newBook, Sheet** newSheet, customerDetails* details, std::vector<entry*> entries, int index, int total, int totalDiscount, float totalMR, int rowNum);
 bool appendToFile(customerDetails* details, std::vector<entry*> entries);
+//@endOfFile
+bool endOfFile(int total, int totalDiscount, float totalMR, Book** newBook, Sheet** newSheet, int rowNum, customerDetails* details);
 
 #endif // BUTTONACTIONS_H
