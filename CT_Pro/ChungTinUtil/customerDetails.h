@@ -9,7 +9,7 @@ class customerDetails
 public:
 
     //Constructor
-    customerDetails(std::string cName, std::string cAddr, std::string supe, std::string qID, std::string sName, std::string fName, int cTel, int cID)
+    customerDetails(std::string cName, std::string cAddr, std::string supe, std::string qID, std::string sName, std::string fName, int cTel, std::string cID)
         :customerName(cName),customerAddr(cAddr), supervisor(supe), quotationID(qID), staffName(sName), customerTel(cTel), customerID(cID)
     {
         setFileName(fName);
@@ -30,7 +30,7 @@ public:
                                            "\n" + getQuotationID() + "\n" + getStaffName() + "\n" + getfileName() + "\n"
                                            + std::to_string(getCustomerTel()) + "\n" + std::to_string(getCustomerID()) + "\n"; }
     int getCustomerTel() {return customerTel;}
-    int getCustomerID() {return customerID;}
+    std::string getCustomerID() {return customerID;}
     ~customerDetails();
 
 private:
@@ -41,7 +41,7 @@ private:
     std::string staffName;
     std::string fileName;
     int customerTel;
-    int customerID;
+    std::string customerID;
 };
 
 #endif // CUSTOMERDETAILS_H
