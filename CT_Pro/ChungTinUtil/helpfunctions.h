@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <stdlib.h>
-
+#include <fstream>
 #pragma comment(lib,"Shell32")
 #pragma comment(lib,"Ole32")
 #include "QLineEdit"
@@ -28,6 +28,9 @@ QFont modFontSize(QFont f, int size);
 
 void widgetConfigForPopUp(QLineEdit** input, QLabel** label, int x, int x1, int y, int y1, int width, int width1, int height, int height1);
 
+//@get_desktop_path()
+//@Description: It returns the directory path to the user's desktop
+//@Return: The directory path to the user's desktop
 std::string get_desktop_path();
 
 std::string centerText(const std::string& text, int width);
@@ -39,4 +42,16 @@ std::string getCurrentDate();
 
 
 libxl::Sheet* insertPicture(libxl::Book** book, std::string pictureFile, int row, int column);
+
+//@directoryExists()
+//@Param: const char* dirPath
+//@Descriptions: Checks if the dirPath exists or not.
+//@Return: True -> The directory exists
+//		 : False -> The directory does not exist
+bool directoryExists(const char* dirPath);
+
+//@wstringToFile()
+//@Param: wstring str, std::fstream* item
+//@Descriptions: Basically allows fstream item to take in a wstring variable and write it into a file
+void wstringToFile(std::wstring str, std::fstream* item);
 #endif // HELPFUNCTIONS_H
