@@ -1,14 +1,12 @@
 #include "helpfunctions.h"
 #include <codecvt>
-
+#include <io.h>
 QFont modFontSize(QFont f, int size)
 {
     QFont font = f;
     font.setPointSize(size);
     return font;
 }
-
-
 
 
 void widgetConfig(QWidget* wq, QLineEdit** input, QLabel** label, QString name, int x, int x1, int y, int y1, int width, int width1, int height, int height1)
@@ -96,3 +94,21 @@ libxl::Sheet* insertPicture(libxl::Book** book, std::string pictureFile, int row
     }
     return nullptr;
 }
+
+bool directoryExists(const char* dirPath)
+{
+    if (_access(dirPath, 0) == 0)
+    {
+        return true;
+    }
+    return false;
+}
+
+void wstringToFile(std::wstring str, std::fstream* item)
+{
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+    std::string utf8String = converter.to_bytes(str);
+    item->write(utf8String.c_str(), utf8String.length());
+}
+
+
