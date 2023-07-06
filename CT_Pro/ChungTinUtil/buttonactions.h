@@ -26,9 +26,15 @@ bool createNewFile();
 bool modifyDataBase();
 
 //@appendToFile
-//bool appendToFile(Book** newBook, Sheet** newSheet, customerDetails* details, std::vector<entry*> entries, int index, int total, int totalDiscount, float totalMR, int rowNum);
+//@Param: customerDetails* details, std::vector<entry*> entries
+//@Descriptions: Will write customerDetials and products info into an excel file
+//@Return: Always return true
 bool appendToFile(customerDetails* details, std::vector<entry*> entries);
+
 //@endOfFile
+//@Param: int total, int totalDiscount, float totalMR, Book** newBook, Sheet** newSheet, int rowNum, customerDetails* details
+//@Descriptions: Will write the ending of the file
+//@Return: Always return true
 bool endOfFile(int total, int totalDiscount, float totalMR, Book** newBook, Sheet** newSheet, int rowNum, customerDetails* details);
 
 #endif // BUTTONACTIONS_H
