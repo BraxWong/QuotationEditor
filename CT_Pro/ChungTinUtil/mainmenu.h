@@ -14,10 +14,13 @@
 
 
 //@mainMenuSetUp
+//@Param: MainWindow **mw
 //@Description: This is used to set up the main menu
+//@Return: True if nothing throw an error
 bool mainMenuSetUp(MainWindow **mw);
 
 //@widgetSetup
+//@Param: MainWindow **mw
 //@Description: Setting up the widget for the main menu
 //@Return: True if nothing throws an error
 bool widgetSetup(MainWindow **mw);
