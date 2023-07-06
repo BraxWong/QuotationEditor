@@ -40,7 +40,10 @@ std::string centerText(const std::string& text, int width);
 //@Return: The date in type string
 std::string getCurrentDate();
 
-
+//@insertPicture()
+//@Param: libxl::Book** book, std::string pictureFile, int row, int column
+//@Descriptions: It will attempt to insert a picture into the excel sheet.
+//@Return: It will return the libxl::Sheet* with the picture in it
 libxl::Sheet* insertPicture(libxl::Book** book, std::string pictureFile, int row, int column);
 
 //@directoryExists()
