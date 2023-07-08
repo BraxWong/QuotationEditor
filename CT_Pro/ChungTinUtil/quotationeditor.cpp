@@ -6,15 +6,20 @@
 #include "buttonactions.h"
 #include "libxl.h"
 #include "Database.h"
+#include "error.h"
+#include <codecvt>
+#include <sstream>
+#include <string>
+
 
 using namespace libxl;
 
 MainWindow* editor;
 QLineEdit* fileName, *customerName, *customerAddr, *supervisor, *customerTel, *customerID, *quotationID, *staff, *productName, *quantity, *pricePerUnit, *MJHR, *model, *approvalNum, *additions,
-    *dimensionsX, *dimensionsY, *dimensionsZ, *discount;
+    *dimensionsX, *dimensionsY, *dimensionsZ, *discount, *preOwned, *provided;
 QLabel* fileNameLabel, * customerNameLabel, * customerAddrLabel, * supervisorLabel,
 * customerTelLabel, * customerIDLabel, * quotationIDLabel, * staffLabel, * productNameLabel, * quantityLabel, * pricePerUnitLabel, * MJHRLabel, * modelLabel, * approvalNumLabel, *additionsLabel,
-    *dimensionsLabel, *dimensionsLabel2, *dimensionsLabel3, *discountLabel;
+    *dimensionsLabel, *dimensionsLabel2, *dimensionsLabel3, *discountLabel, *preOwnedLabel, *providedLabel;
 QWidget* wq;
 QPushButton* submit, *addItems, *complete, *verifyItem;
 QDialog* popUp;
@@ -28,7 +33,7 @@ bool createNewItems()
     popUp->setWindowTitle("Adding New Items");
     popUp->show();
     popUp->setAttribute(Qt::WA_DeleteOnClose);
-    popUp->setFixedSize(700,620);
+    popUp->setFixedSize(700, 620);
     quantity = new QLineEdit(popUp);
     quantityLabel = new QLabel("數量", popUp);
     HELPFUNCTIONS_H::widgetConfigForPopUp(&quantity, &quantityLabel, 100, 20, 120, 90, 200, 100, 50, 100);
@@ -67,12 +72,20 @@ bool createNewItems()
     discountLabel = new QLabel("香港中華煤氣有限公司(尊貴客戶)優惠", popUp);
     HELPFUNCTIONS_H::widgetConfigForPopUp(&discount, &discountLabel, 420, 385, 180, 0, 200, 300, 50, 300);
 
+    preOwned = new QLineEdit(popUp);
+    preOwnedLabel = new QLabel("客戶現有爐具 Y/N", popUp);
+    HELPFUNCTIONS_H::widgetConfigForPopUp(&preOwned, &preOwnedLabel, 420, 450, 280, 100, 200, 300, 50, 300);
+
+    provided = new QLineEdit(popUp);
+    providedLabel = new QLabel("煤氣公司提供 Y/N", popUp);
+    HELPFUNCTIONS_H::widgetConfigForPopUp(&provided, &providedLabel, 420, 450, 380, 200, 200, 300, 50, 300);
+
     complete = new QPushButton("完成", popUp);
-    complete->setGeometry(500, 250, 40, 40);
+    complete->setGeometry(500, 450, 40, 40);
     complete->setFont(modFontSize(complete->font(), 10));
     complete->show();
     QObject::connect(complete, &QPushButton::clicked, [&] {
-       
+
         std::wstring modelText, approvalText, additionText;
         if (approvalNum->text().isEmpty())
         {
@@ -99,55 +112,72 @@ bool createNewItems()
             additionText = additions->text().toStdWString();
         }
         Database db;
-      /*  e = new entry(additionText, productName->text().toStdWString(), modelText, dimensionsX->text().toStdString(), dimensionsY->text().toStdString(), dimensionsZ->text().toStdString(), approvalText, std::stoi(quantity->text().toStdString()),
-            std::stoi(pricePerUnit->text().toStdString()), std::stof(MJHR->text().toStdString()), std::stoi(discount->text().toStdString()));
-        entries.push_back(e);*/
         if (!db.itemExistsInDatabase(productName->text().toStdWString()))
         {
             db.databaseEntry(additionText, productName->text().toStdWString(), modelText, dimensionsX->text().toStdString(), dimensionsY->text().toStdString(), dimensionsZ->text().toStdString(), approvalText, std::stoi(quantity->text().toStdString()),
                 std::stoi(pricePerUnit->text().toStdString()), std::stof(MJHR->text().toStdString()));
         }
+        bool pO, pV;
+        if (preOwned->text() == "Y" || preOwned->text() == "y" || preOwned->text() == "yes" || preOwned->text() == "Yes")
+        {
+            pO = true;
+        }
+        else
+        {
+            pO = false;
+        }
+        if (provided->text() == "Y" || provided->text() == "y" || provided->text() == "yes" || provided->text() == "Yes")
+        {
+            pV = true;
+        }
+        else
+        {
+            pV = false;
+        }
+        e = new entry(additionText, productName->text().toStdWString(), modelText, dimensionsX->text().toStdString(), dimensionsY->text().toStdString(), dimensionsZ->text().toStdString(), approvalText, std::stoi(quantity->text().toStdString()),
+            std::stoi(pricePerUnit->text().toStdString()), std::stof(MJHR->text().toStdString()), std::stoi(discount->text().toStdString()), pO, pV);
+        entries.push_back(e);
         popUp->close();
         delete popUp;
     });
 
     productName = new QLineEdit(popUp);
-    productNameLabel = new QLabel("產品名稱",popUp);
-    HELPFUNCTIONS_H::widgetConfigForPopUp(&productName,&productNameLabel,100,20,50,23,200,100,50,100);
+    productNameLabel = new QLabel("產品名稱", popUp);
+    HELPFUNCTIONS_H::widgetConfigForPopUp(&productName, &productNameLabel, 100, 20, 50, 23, 200, 100, 50, 100);
 
-    verifyItem = new QPushButton("查對",popUp);
+    verifyItem = new QPushButton("查對", popUp);
     verifyItem->show();
-    verifyItem->setGeometry(323,53,40,40);
+    verifyItem->setGeometry(323, 53, 40, 40);
     verifyItem->setFont(modFontSize(verifyItem->font(), 10));
     QObject::connect(verifyItem, &QPushButton::clicked, [&] {
-        Database db;
-        std::vector<std::wstring> result;
-        if (db.itemExistsInDatabase(productName->text().toStdWString()))
-        {
-            result = db.dataToEditor(productName->text().toStdWString());
-            QString qtString = QString::fromStdWString(result[1]);
-            QString qtString2 = QString::fromStdWString(result[2]);
-            QString qtString3 = QString::fromStdWString(result[3]);
-            QString qtString4 = QString::fromStdWString(result[4]);
-            QString qtString5 = QString::fromStdWString(result[5]);
-            QString qtString6 = QString::fromStdWString(result[6]);
-            QString qtString7 = QString::fromStdWString(result[7]);
-            QString qtString8 = QString::fromStdWString(result[8]);
-            model->setText(qtString);
-            additions->setText(qtString2);
-            dimensionsX->setText(qtString3);
-            dimensionsY->setText(qtString4);
-            dimensionsZ->setText(qtString5);
-            approvalNum->setText(qtString6);
-            pricePerUnit->setText(qtString7);
-            MJHR->setText(qtString8);
-        }
-
+       Database db;
+       db.itemExistsInDatabase(productName->text().toStdWString());
+       if (db.itemExistsInDatabase(productName->text().toStdWString()))
+       {
+           std::vector<std::wstring> result = db.dataToEditor(productName->text().toStdWString());
+           if (result.size() != 0)
+           {
+               model->setText(QString::fromStdWString(result[1]));
+               additions->setText(QString::fromStdWString(result[2]));
+               dimensionsX->setText(QString::fromStdWString(result[3]));
+               dimensionsY->setText(QString::fromStdWString(result[4]));
+               dimensionsZ->setText(QString::fromStdWString(result[5]));
+               approvalNum->setText(QString::fromStdWString(result[6]));
+               pricePerUnit->setText(QString::fromStdWString(result[7]));
+               MJHR->setText(QString::fromStdWString(result[8]));
+           }
+       }
+       else
+       {
+          error* Error = new error();
+          Error->showError("This item is not in the database", 110,0,182,182);
+       }
      });
 
    
     return true;
 }
+
 
 
 
