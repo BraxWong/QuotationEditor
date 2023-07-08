@@ -1,6 +1,7 @@
 #include "mainmenu.h"
 #include "buttonactions.h"
 #include "helpfunctions.h"
+#include "error.h"
 
 bool mainMenuSetUp(MainWindow **mw)
 {
@@ -37,9 +38,17 @@ bool widgetSetup(MainWindow **mw)
     createNewFile->setFont(HELPFUNCTIONS_H::modFontSize(createNewFile->font(),10));
     QObject::connect(createNewFile, &QPushButton::clicked, [&]
     {
-        if(actionRan)
-            BUTTONACTIONS_H::createNewFile();
-            actionRan = false;
+        if (actionRan)
+        {
+           BUTTONACTIONS_H::createNewFile();
+           actionRan = false;
+        }
+        else
+        {
+            error* ErrorMessage = new error();
+            ErrorMessage->showError("Error: Not able to create a new window",110, 0, 182, 182);
+        }
+        
     });
 
     QPushButton *quit = new QPushButton();
@@ -57,9 +66,11 @@ bool widgetSetup(MainWindow **mw)
     modifyDataBase->setGeometry(380,160,60,30);
     modifyDataBase->setText("改數據庫");
     modifyDataBase->setFont(HELPFUNCTIONS_H::modFontSize(quit->font(),10));
-    QObject::connect(modifyDataBase, &QPushButton::clicked,[&]
+    QObject::connect(modifyDataBase, &QPushButton::clicked, [&]
     {
         BUTTONACTIONS_H::modifyDataBase();
+        error* errorMessage = new error();
+        errorMessage->showError("Pay up and I will think about it.", 110, 0, 182, 182);
     });
     window->setCentralWidget(qw);
     return true;
