@@ -3,7 +3,6 @@
 #include "helpfunctions.h"
 #include <codecvt>
 #include "libxl.h"
-
 using namespace libxl;
 
 void exitProgram(QLabel* label, QPushButton* quit, QPushButton* createNewFile, MainWindow* window, QWidget* qw)
@@ -438,7 +437,6 @@ bool endOfFile(int total, int totalDiscount, float totalMR, Book** newBook, Shee
     std::wstring wstr(path.begin(), path.end());
     book->save(wstr.c_str());
     book->release();
-    delete book;
     return false;
 }
 
