@@ -27,6 +27,38 @@ customerDetails* details;
 std::vector<entry*> entries;
 entry* e;
 
+void cleanUp()
+{
+    delete editor;
+    verifyItem->deleteLater();
+    complete->deleteLater();
+    productName->deleteLater();
+    quantity->deleteLater();
+    pricePerUnit->deleteLater();
+    MJHR->deleteLater();
+    model->deleteLater();
+    dimensionsX->deleteLater();
+    dimensionsY->deleteLater();
+    dimensionsZ->deleteLater();
+    discount->deleteLater();
+    preOwned->deleteLater();
+    provided->deleteLater();
+    productNameLabel->deleteLater();
+    quantityLabel->deleteLater();
+    pricePerUnitLabel->deleteLater();
+    MJHRLabel->deleteLater();
+    modelLabel->deleteLater();
+    approvalNumLabel->deleteLater();
+    approvalNum->deleteLater();
+    additions->deleteLater();
+    dimensionsLabel->deleteLater();
+    dimensionsLabel2->deleteLater();
+    dimensionsLabel3->deleteLater();
+    discountLabel->deleteLater();
+    preOwnedLabel->deleteLater();
+    providedLabel->deleteLater();
+}
+
 bool createNewItems()
 {
     popUp = new QDialog();
@@ -179,8 +211,6 @@ bool createNewItems()
 }
 
 
-
-
 bool quotationEditorSetup()
 {
     editor = new MainWindow();
@@ -241,7 +271,9 @@ bool quotationWidgetSetup()
                                           std::stoi(customerTel->text().toStdString()),customerID->text().toStdString());
             BUTTONACTIONS_H::appendToFile(details,entries);
         }
+        
         editor->close();
+        cleanUp();
     });
 
     addItems = new QPushButton();
