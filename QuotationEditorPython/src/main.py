@@ -1,7 +1,12 @@
-import PySide6.QtCore
+from PySide6 import QtWidgets
+import sys
+import MainMenu
 
-# Prints PySide6 version
-print(PySide6.__version__)
+if __name__ == "__main__":
+    app = QtWidgets.QApplication([])
 
-# Prints the Qt version used to compile PySide6
-print(PySide6.QtCore.__version__)
+    widget = MainMenu.MainMenu()
+    widget.resize(800, 600)
+    widget.show()
+
+    sys.exit(app.exec())
