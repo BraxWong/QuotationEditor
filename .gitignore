@@ -1,3 +1,2 @@
-QuotationEditorPython/src/build/*
-QuotationEditorPython/src/dist/*
-
+QuotationEditorPython/src/build
+QuotationEditorPython/src/dist
