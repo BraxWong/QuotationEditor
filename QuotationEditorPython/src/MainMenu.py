@@ -1,5 +1,5 @@
 from PySide6 import QtCore, QtWidgets
-from QuotationEditor import QuotationEditor
+from CustomerDetails import CustomerDetails
 import sys
 
 class MainMenu(QtWidgets.QMainWindow):
@@ -8,7 +8,7 @@ class MainMenu(QtWidgets.QMainWindow):
         self.setWindowTitle("中天廚房設備有限公司報價單編輯器")
 
         self.newQuotationButton = QtWidgets.QPushButton("新報價單")
-        self.newQuotationButton.clicked.connect(self.openQuotationEditor)
+        self.newQuotationButton.clicked.connect(self.openCustomerDetails)
         
         self.exitApplicationButton = QtWidgets.QPushButton("關閉程序")
         self.exitApplicationButton.clicked.connect(self.exitApplication)
@@ -32,9 +32,9 @@ class MainMenu(QtWidgets.QMainWindow):
     def exitApplication(self):
         sys.exit()
 
-    def openQuotationEditor(self):
-        self.quotationEditor = QuotationEditor()
-        self.quotationEditor.resize(800, 600)
-        self.quotationEditor.show()
+    def openCustomerDetails(self):
+        self.customerDetails = CustomerDetails()
+        self.customerDetails.resize(800, 600)
+        self.customerDetails.show()
 
 

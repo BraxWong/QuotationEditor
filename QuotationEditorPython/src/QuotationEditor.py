@@ -1,5 +1,6 @@
 from PySide6 import QtWidgets, QtCore
 import sys
+import utils
 
 class QuotationEditor(QtWidgets.QWidget):
     def __init__(self):
@@ -90,32 +91,13 @@ class QuotationEditor(QtWidgets.QWidget):
         self.additionalLayout.setSpacing(14)
 
         self.submitButton = QtWidgets.QPushButton("完成")
-        self.submitButton.clicked.connect(self.writeToFile)
 
         self.mainLayout = QtWidgets.QVBoxLayout()
         self.mainLayout.addWidget(self.addNewItemLabel, 0, QtCore.Qt.AlignTop | QtCore.Qt.AlignHCenter)
-        self.mainLayout.addLayout(self.productLayout)
-        self.mainLayout.addLayout(self.quantityLayout)
-        self.mainLayout.addLayout(self.pricePerUnitLayout)
-        self.mainLayout.addLayout(self.MJHRLayout)
-        self.mainLayout.addLayout(self.modelLayout)
-        self.mainLayout.addLayout(self.additionalLayout)
-        self.mainLayout.addLayout(self.approvalNumLayout)
-        self.mainLayout.addLayout(self.dimensionsLayout)
-        self.mainLayout.addLayout(self.providedLayout)
-        self.mainLayout.addLayout(self.discountLayout)
+        utils.addLayoutsToMainLayout(self.mainLayout, [self.productLayout, self.quantityLayout, self.pricePerUnitLayout, self.MJHRLayout, self.modelLayout, self.additionalLayout, self.approvalNumLayout, self.dimensionsLayout, self.providedLayout, self.discountLayout])
         self.mainLayout.addWidget(self.submitButton, 0, QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter)
 
         self.setLayout(self.mainLayout)
-
-    def writeToFile(self):
-        sys.exit()        
-
-#       ╭━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╮
-#       ┃                                                                 ┃
-#       ┃ TODO: Create a File class that handles files related operations ┃
-#       ┃                                                                 ┃
-#       ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
 
 
     def verifyItem(self):
