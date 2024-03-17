@@ -1,11 +1,13 @@
 from PySide6 import QtWidgets, QtCore
 from QuotationEditor import QuotationEditor
 import utils
+import Entry
 
 class CustomerDetails(QtWidgets.QWidget):
     def __init__(self) :
         super().__init__()
 
+        self.entryList = [] 
         self.fileNameLabel = QtWidgets.QLabel("檔案名稱")
         self.fileNameLineEdit = QtWidgets.QLineEdit()
         self.fileNameLayout = QtWidgets.QHBoxLayout()
@@ -49,6 +51,7 @@ class CustomerDetails(QtWidgets.QWidget):
         self.addNewItemButton = QtWidgets.QPushButton("添加項目")
         self.addNewItemButton.clicked.connect(self.openQuotationEditor)
         self.submitButton = QtWidgets.QPushButton("完成")
+        self.submitButton.clicked.connect(self.writeToFile)
         self.buttonLayout = QtWidgets.QHBoxLayout()
         self.buttonLayout.addWidget(self.addNewItemButton)
         self.buttonLayout.addWidget(self.submitButton)
@@ -59,5 +62,12 @@ class CustomerDetails(QtWidgets.QWidget):
 
     def openQuotationEditor(self):
         self.quotationEditor = QuotationEditor()
+        self.quotationEditor.editorClosed.connect(self.testing)
         self.quotationEditor.resize(800, 600)
         self.quotationEditor.show()
+        
+    def testing(self, entry):
+        self.entryList.append(entry)
+
+    def writeToFile(self):
+        print("Will write to file soon")

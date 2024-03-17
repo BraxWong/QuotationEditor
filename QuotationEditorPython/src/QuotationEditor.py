@@ -1,10 +1,15 @@
 from PySide6 import QtWidgets, QtCore
 import sys
 import utils
+import Entry
 
 class QuotationEditor(QtWidgets.QWidget):
+    editorClosed = QtCore.Signal(object)
+
     def __init__(self):
         super().__init__()
+        self.entry = None
+
         self.addNewItemLabel = QtWidgets.QLabel("添加新物品")
 
         self.quantityLabel = QtWidgets.QLabel("數量")
@@ -91,7 +96,7 @@ class QuotationEditor(QtWidgets.QWidget):
         self.additionalLayout.setSpacing(14)
 
         self.submitButton = QtWidgets.QPushButton("完成")
-
+        self.submitButton.clicked.connect(self.completeEdit)
         self.mainLayout = QtWidgets.QVBoxLayout()
         self.mainLayout.addWidget(self.addNewItemLabel, 0, QtCore.Qt.AlignTop | QtCore.Qt.AlignHCenter)
         utils.addLayoutsToMainLayout(self.mainLayout, [self.productLayout, self.quantityLayout, self.pricePerUnitLayout, self.MJHRLayout, self.modelLayout, self.additionalLayout, self.approvalNumLayout, self.dimensionsLayout, self.providedLayout, self.discountLayout])
@@ -108,3 +113,10 @@ class QuotationEditor(QtWidgets.QWidget):
 #                        ┃                               ┃
 #                        ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
 
+    def completeEdit(self):
+        self.entry = Entry.Entry(self.additionalLineEdit.text(), self.productLineEdit.text(), self.modelLineEdit.text(), self.dimensionXLineEdit.text(), self.dimensionYLineEdit.text(), self.dimensionZLineEdit.text(), self.approvalNumLineEdit.text(), int(self.quantityLineEdit.text()),  float(self.pricePerUnitLineEdit.text()), float(self.MJHRLineEdit.text()), float(self.discountLineEdit.text()))
+        super().close()
+
+    def closeEvent(self, event):
+        self.editorClosed.emit(self.entry)  
+        super().closeEvent(event)
