@@ -1,7 +1,8 @@
-from PySide6 import QtWidgets, QtCore
+from PySide6 import QtWidgets
 from QuotationEditor import QuotationEditor
 import utils
-import Entry
+import OrderDetails
+import XlsxWriter
 
 class CustomerDetails(QtWidgets.QWidget):
     def __init__(self) :
@@ -68,6 +69,11 @@ class CustomerDetails(QtWidgets.QWidget):
         
     def testing(self, entry):
         self.entryList.append(entry)
+        for e in self.entryList:
+            print(e.productName)
 
     def writeToFile(self):
-        print("Will write to file soon")
+        self.orderDetails = OrderDetails.OrderDetails(self.customerNameLineEdit.text(), self.customerAddrLineEdit.text(), self.supervisorLineEdit.text(), self.quotationIDLineEdit.text(), self.staffLineEdit.text(), self.fileNameLineEdit.text(), int(self.customerTelLineEdit.text()), self.customerIDLineEdit.text())
+        self.xlsxWriter = XlsxWriter.XlsxWriter(self.entryList, self.orderDetails)
+        self.xlsxWriter.writeToXlsx()
+        super().close()
