@@ -25,9 +25,10 @@ class XlsxWriter:
         underline_format = workbook.add_format({
         'bottom': 1,  # Set a bottom border
         'bottom_color': 'black',  # Set the bottom border color to black
+        'align': 'center'
         })
         underline_format.set_bottom(2)  # Set the bottom border style to underline
-
+        underline_format.set_align("vcenter")
         underline_format2 = workbook.add_format({
         'bottom': 1,  # Set a bottom border
         'bottom_color': 'black',  # Set the bottom border color to black
@@ -38,8 +39,9 @@ class XlsxWriter:
 
         worksheet.set_column('B:B', 38)
         worksheet.set_column('C:C', 4)
-        worksheet.set_column('E:E', 12)
-        worksheet.set_column('F:F', 12)
+        worksheet.set_column('D:D', 14)
+        worksheet.set_column('E:E', 14)
+        worksheet.set_column('F:F', 14)
         worksheet.set_row(0, 30)
         worksheet.merge_range('A1:F1', '中天廚房設備有限公司', merge_format)
         worksheet.merge_range('A2:F2', 'CHUNG TIN KITCHEN WARES COMPANY LIMITED', merge_format2)
@@ -67,7 +69,7 @@ class XlsxWriter:
         worksheet.write_string(12, 0, '客戶編號:', merge_format5)
         worksheet.write_string(12, 1, self.orderDetails.customerID, merge_format5)
         worksheet.write_string(13, 0, '項目', underline_format)
-        worksheet.write_string(13, 1, '內容', underline_format2)
+        worksheet.write_string(13, 1, '內容', underline_format)
         worksheet.write_string(13, 2, '數量', underline_format)
         worksheet.write_string(13, 3, '單價', underline_format)
         worksheet.write_string(13, 4, '金額', underline_format)
@@ -88,11 +90,33 @@ class XlsxWriter:
         
 
     def printEntries(self,worksheet, workbook, entries):
-        itemNum = 0
+        itemNum = 1 
+        rowNum = 15
         merge_format = self.createFormat(workbook, 12, 'Calibri (Body)', False)
+        merge_format.set_align("left")
+        merge_format2 = self.createFormat(workbook, 12, 'Calibri (Body)', False)
+        merge_format3 = self.createFormat(workbook, 12, 'Calibri (Body)', False)
+        merge_format3.set_align("right")
+        currency_format = workbook.add_format({'num_format': '$#,##0.00'})
+        discount_currency_format = workbook.add_format({'num_format': '-$#,##0.00'})
 
         for entry in entries:
-            worksheet.write_number(15, 0, ++itemNum, merge_format)
-            worksheet.write_string(15, 1, entry.productName, merge_format)
-
-
+            totalPrice = int(entry.price) * int(entry.quantity)
+            worksheet.write_number(rowNum, 0, itemNum, merge_format2)
+            worksheet.write_string(rowNum, 1, entry.productName, merge_format)
+            worksheet.write_number(rowNum, 2, int(entry.quantity), merge_format2)
+            worksheet.write_number(rowNum, 3, int(entry.price), currency_format)
+            worksheet.write_number(rowNum, 4, totalPrice, currency_format)
+            worksheet.write_string(rowNum, 5, str(entry.MJHR) + "MJ/HR", merge_format3)
+            rowNum = rowNum + 1
+            worksheet.write_string(rowNum, 1, "型號:" + entry.modelName + ",批核編號(" + entry.approveNumber + ")", merge_format)
+            rowNum = rowNum + 1
+            worksheet.write_string(rowNum, 1, entry.dimensionX + "X" + entry.dimensionY + "X" + entry.dimensionZ + "H", merge_format)
+            if entry.discount:
+                rowNum = rowNum + 1
+                worksheet.write_string(rowNum, 1, "香港中華煤氣有限公司(尊貴客戶)優惠", merge_format)
+                worksheet.write_number(rowNum , 2, int(entry.quantity), merge_format2)
+                worksheet.write_number(rowNum, 3, int(entry.price), discount_currency_format)
+                worksheet.write_number(rowNum, 4, totalPrice, discount_currency_format)
+            rowNum = rowNum + 2
+            itemNum = itemNum + 1
