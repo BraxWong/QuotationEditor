@@ -63,14 +63,12 @@ class CustomerDetails(QtWidgets.QWidget):
 
     def openQuotationEditor(self):
         self.quotationEditor = QuotationEditor()
-        self.quotationEditor.editorClosed.connect(self.testing)
+        self.quotationEditor.editorClosed.connect(self.appendEntryToList)
         self.quotationEditor.resize(800, 600)
         self.quotationEditor.show()
         
-    def testing(self, entry):
+    def appendEntryToList(self, entry):
         self.entryList.append(entry)
-        for e in self.entryList:
-            print(e.productName)
 
     def writeToFile(self):
         self.orderDetails = OrderDetails.OrderDetails(self.customerNameLineEdit.text(), self.customerAddrLineEdit.text(), self.supervisorLineEdit.text(), self.quotationIDLineEdit.text(), self.staffLineEdit.text(), self.fileNameLineEdit.text(), int(self.customerTelLineEdit.text()), self.customerIDLineEdit.text())

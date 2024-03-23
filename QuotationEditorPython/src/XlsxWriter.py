@@ -5,6 +5,9 @@ class XlsxWriter:
     def __init__(self, entry, orderDetails) -> None:
         self.entry = entry
         self.orderDetails = orderDetails
+        self.total = 0
+        self.totalDiscount = 0
+        self.totalMJHR = 0
 
     def writeToXlsx(self):
         workbook = xlsxwriter.Workbook(self.orderDetails.fileName)
@@ -102,12 +105,14 @@ class XlsxWriter:
 
         for entry in entries:
             totalPrice = int(entry.price) * int(entry.quantity)
+            self.total = self.total + totalPrice
             worksheet.write_number(rowNum, 0, itemNum, merge_format2)
             worksheet.write_string(rowNum, 1, entry.productName, merge_format)
             worksheet.write_number(rowNum, 2, int(entry.quantity), merge_format2)
             worksheet.write_number(rowNum, 3, int(entry.price), currency_format)
             worksheet.write_number(rowNum, 4, totalPrice, currency_format)
             worksheet.write_string(rowNum, 5, str(entry.MJHR) + "MJ/HR", merge_format3)
+            self.totalMJHR = self.totalMJHR + entry.MJHR
             rowNum = rowNum + 1
             worksheet.write_string(rowNum, 1, "型號:" + entry.modelName + ",批核編號(" + entry.approveNumber + ")", merge_format)
             rowNum = rowNum + 1
@@ -118,5 +123,33 @@ class XlsxWriter:
                 worksheet.write_number(rowNum , 2, int(entry.quantity), merge_format2)
                 worksheet.write_number(rowNum, 3, int(entry.price), discount_currency_format)
                 worksheet.write_number(rowNum, 4, totalPrice, discount_currency_format)
+                self.totalDiscount = self.totalDiscount + totalPrice
             rowNum = rowNum + 2
             itemNum = itemNum + 1
+
+    def printEndOfFile(self, worksheet, workbook, rowNum):
+        currency_format = workbook.add_format({'num_format': '$#,##0.00'})
+        discount_currency_format = workbook.add_format({'num_format': '-$#,##0.00'})
+        total_currency_format = self.createFormat(workbook, 14, '新細明體', True)
+        total_currency_format = workbook.add_format({'num_format': '$#,##0.00'})
+        merge_format = self.createFormat(workbook, 13, '新細明體', True)
+        merge_format.set_align("right")
+        merge_format2 = self.createFormat(workbook, 13, 'Calibri (Body)', True)
+        merge_format2.set_align("left")
+        merge_format3 = self.createFormat(workbook, 12, '新細明體', False)
+        merge_format4 = self.createFormat(workbook, 14, '新細明體', True)
+        worksheet.write_string(rowNum, 0, '*', merge_format)
+        worksheet.write_string(rowNum, 1, '以上報價不包括煤氣錶按金及街喉費用', merge_format2)
+        rowNum = rowNum + 2
+        worksheet.write_string(rowNum, 3, '合共金額 : ', merge_format3)
+        worksheet.write_number(rowNum, 4, self.total, currency_format)
+        rowNum = rowNum + 1
+        worksheet.merge_range(rowNum, 1, rowNum, 3, '香港中華煤氣有限公司『尊貴客戶』優惠 - 合共金額 : ', merge_format3)
+        worksheet.write_number(rowNum, 4, self.totalDiscount, discount_currency_format)
+        rowNum = rowNum + 1
+        worksheet.merge_range(rowNum, 2, rowNum, 3, '客人應付金額 : ', merge_format4)
+        worksheet.write_number(rowNum, 4, self.total - self.totalDiscount, total_currency_format)
+        rowNum = rowNum + 1
+        worksheet.merge_range(rowNum, 2, rowNum, 3, '合共兆焦耳(MJ/HR)',merge_format4)
+        worksheet.write_string(rowNum, 4, self.totalMJHR, merge_format2)
+
