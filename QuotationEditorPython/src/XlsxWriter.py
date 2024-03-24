@@ -79,6 +79,7 @@ class XlsxWriter:
         worksheet.write_string(13, 5, '兆焦耳(MJ/HR)', underline_format)
 
         self.printEntries(worksheet, workbook, self.entry)
+        self.printEndOfFile(worksheet,workbook, 50)
         workbook.close()
 
     def createFormat(self, workbook: xlsxwriter.Workbook, font_size, font_name, bold):
@@ -129,15 +130,25 @@ class XlsxWriter:
 
     def printEndOfFile(self, worksheet, workbook, rowNum):
         currency_format = workbook.add_format({'num_format': '$#,##0.00'})
+        currency_format.set_top(2)
         discount_currency_format = workbook.add_format({'num_format': '-$#,##0.00'})
         total_currency_format = self.createFormat(workbook, 14, '新細明體', True)
         total_currency_format = workbook.add_format({'num_format': '$#,##0.00'})
+        total_currency_format.set_bottom(6)
+        total_currency_format.set_top(2)
         merge_format = self.createFormat(workbook, 13, '新細明體', True)
         merge_format.set_align("right")
         merge_format2 = self.createFormat(workbook, 13, 'Calibri (Body)', True)
         merge_format2.set_align("left")
         merge_format3 = self.createFormat(workbook, 12, '新細明體', False)
-        merge_format4 = self.createFormat(workbook, 14, '新細明體', True)
+        merge_format3.set_align("right")
+        merge_format5 = self.createFormat(workbook, 12, '新細明體', True)
+        merge_format5.set_align("left")
+        merge_format5.set_underline(1)
+        merge_format6 = self.createFormat(workbook, 12, '新細明體', False)
+        merge_format6.set_align("left")
+        mjhr_format = self.createFormat(workbook, 13, 'Calibri (Body)', True)
+        mjhr_format.set_align("right")
         worksheet.write_string(rowNum, 0, '*', merge_format)
         worksheet.write_string(rowNum, 1, '以上報價不包括煤氣錶按金及街喉費用', merge_format2)
         rowNum = rowNum + 2
@@ -147,9 +158,33 @@ class XlsxWriter:
         worksheet.merge_range(rowNum, 1, rowNum, 3, '香港中華煤氣有限公司『尊貴客戶』優惠 - 合共金額 : ', merge_format3)
         worksheet.write_number(rowNum, 4, self.totalDiscount, discount_currency_format)
         rowNum = rowNum + 1
-        worksheet.merge_range(rowNum, 2, rowNum, 3, '客人應付金額 : ', merge_format4)
-        worksheet.write_number(rowNum, 4, self.total - self.totalDiscount, total_currency_format)
+        worksheet.merge_range(rowNum, 2, rowNum, 3, '客人應付金額 : ', merge_format)
+        final = self.total - self.totalDiscount
+        worksheet.write_number(rowNum, 4, int(final), total_currency_format)
         rowNum = rowNum + 1
-        worksheet.merge_range(rowNum, 2, rowNum, 3, '合共兆焦耳(MJ/HR)',merge_format4)
-        worksheet.write_string(rowNum, 4, self.totalMJHR, merge_format2)
+        worksheet.merge_range(rowNum, 2, rowNum, 3, '合共兆焦耳(MJ/HR):',merge_format)
+        worksheet.write_string(rowNum, 4, str(self.totalMJHR) + "MJ/HR", mjhr_format)
+        rowNum = rowNum + 2
+        worksheet.write_string(rowNum, 0, '*備注 : ', merge_format3)
+        worksheet.merge_range(rowNum, 1, rowNum, 4, '1)上述 (尊貴客戶) 爐具優惠以香港中華煤氣有限公司最後批核作準。', merge_format5)
+        rowNum+=1
+        worksheet.merge_range(rowNum, 1, rowNum, 4, '2)上述兆焦耳(MJ/HR) 以最後現場已完成之爐具批核作準, 如超過1150MJ/HR, ', merge_format5)
+        rowNum+=1
+        worksheet.write_string(rowNum, 1, '客人需自行申報環保。', merge_format5)
+        rowNum+=1
+        worksheet.merge_range(rowNum, 1, rowNum, 3, '上述所有由香港中華煤氣有限公司提供(尊貴客戶)優惠', merge_format6)
+        rowNum+=1
+        worksheet.merge_range(rowNum, 1, rowNum, 3, '之爐具已包括本公司首年之免費維修保養及零件更換.', merge_format6)
+        rowNum+=2
+        worksheet.write_string(rowNum, 1, '客戶簽署及蓋印', merge_format6)
+        worksheet.merge_range(rowNum, 4, rowNum, 5, '中天廚房設備有限公司')
+        rowNum+=5
+        underline_format2 = workbook.add_format({
+                            'bottom': 1,  # Set a bottom border
+                            'bottom_color': 'black',  # Set the bottom border color to black
+                            })
+        underline_format2.set_bottom(2)  # Set the bottom border style to underline
+        worksheet.write_string(rowNum, 1, '', underline_format2)
+        worksheet.merge_range(rowNum, 4, rowNum, 5, '', underline_format2)
+
 
