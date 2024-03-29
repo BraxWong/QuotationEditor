@@ -8,6 +8,7 @@ class XlsxWriter:
         self.total = 0
         self.totalDiscount = 0
         self.totalMJHR = 0
+        self.total = 0
         self.row = 0
         self.itemCount = 1 
         self.workbook = xlsxwriter.Workbook(self.orderDetails.fileName)
@@ -113,6 +114,7 @@ class XlsxWriter:
         merge_format2 = self.createFormat(self.workbook, 12, 'Calibri (Body)', False)
         merge_format3 = self.createFormat(self.workbook, 12, 'Calibri (Body)', False)
         merge_format3.set_align("right")
+        merge_format4 = self.createFormat(self.workbook, 12, 'Calibri (Body)', True)
         currency_format = self.workbook.add_format({'num_format': '$#,##0.00'})
         discount_currency_format = self.workbook.add_format({'num_format': '-$#,##0.00'})
         while True:
@@ -123,12 +125,19 @@ class XlsxWriter:
                 return
             currentIndex = self.itemCount - 1
             totalPrice = int(self.entry[currentIndex].price) * int(self.entry[currentIndex].quantity)
-            self.total = self.total + totalPrice
             self.worksheet.write_number(self.row, 0, self.itemCount, merge_format2)
             self.worksheet.write_string(self.row, 1, self.entry[currentIndex].productName, merge_format)
             self.worksheet.write_number(self.row, 2, int(self.entry[currentIndex].quantity), merge_format2)
-            self.worksheet.write_number(self.row, 3, int(self.entry[currentIndex].price), currency_format)
-            self.worksheet.write_number(self.row, 4, totalPrice, currency_format)
+            if self.entry[currentIndex].preOwned == "Yes":
+                self.worksheet.merge_range(self.row, 3, self.row, 4, "客戶現有爐具", merge_format4)
+                totalPrice = 0
+            elif self.entry[currentIndex].provided == "Yes":
+                self.worksheet.merge_range(self.row, 3, self.row, 4, "煤氣公司提供", merge_format4)
+                totalPrice = 0
+            else:
+                self.worksheet.write_number(self.row, 3, int(self.entry[currentIndex].price), currency_format)
+                self.worksheet.write_number(self.row, 4, totalPrice, currency_format)
+            self.total = self.total + totalPrice
             self.worksheet.write_string(self.row, 5, str(self.entry[currentIndex].MJHR) + "MJ/HR", merge_format3)
             self.totalMJHR = self.totalMJHR + self.entry[currentIndex].MJHR
             self.row += 1
@@ -139,9 +148,12 @@ class XlsxWriter:
                 self.row += 1
                 self.worksheet.write_string(self.row, 1, "香港中華煤氣有限公司(尊貴客戶)優惠", merge_format)
                 self.worksheet.write_number(self.row , 2, int(self.entry[currentIndex].quantity), merge_format2)
-                self.worksheet.write_number(self.row, 3, int(self.entry[currentIndex].price), discount_currency_format)
-                self.worksheet.write_number(self.row, 4, totalPrice, discount_currency_format)
-                self.totalDiscount = self.totalDiscount + totalPrice
+                if self.entry[currentIndex].provided == "Yes":
+                    self.worksheet.merge_range(self.row, 3, self.row, 4, "煤氣公司提供", merge_format4)
+                else:
+                    self.worksheet.write_number(self.row, 3, int(self.entry[currentIndex].price), discount_currency_format)
+                    self.worksheet.write_number(self.row, 4, totalPrice, discount_currency_format)
+                    self.totalDiscount = self.totalDiscount + totalPrice
             self.row += 2
             if self.itemCount % 7 == 0:
                 self.itemCount += 1

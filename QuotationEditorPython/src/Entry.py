@@ -1,7 +1,7 @@
 import math
 
 class Entry:
-    def __init__(self, ao, pName, modelName, pDimensionsX, pDimensionsY, pDimensionsZ, approveNum, quant, price, MH, D):
+    def __init__(self, ao, pName, modelName, pDimensionsX, pDimensionsY, pDimensionsZ, approveNum, quant, price, MH, D, preOwned, provided):
         self.addOn = ao
         self.productName = pName
         self.modelName = modelName
@@ -13,4 +13,6 @@ class Entry:
         self.price = price
         self.MJHR = math.floor(MH * 100) / 100;
         self.discount = D
+        self.preOwned = preOwned
+        self.provided = provided
 

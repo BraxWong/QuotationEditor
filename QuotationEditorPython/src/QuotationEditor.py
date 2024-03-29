@@ -114,7 +114,7 @@ class QuotationEditor(QtWidgets.QWidget):
 #                        ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
 
     def completeEdit(self):
-        self.entry = Entry.Entry(self.additionalLineEdit.text(), self.productLineEdit.text(), self.modelLineEdit.text(), self.dimensionXLineEdit.text(), self.dimensionYLineEdit.text(), self.dimensionZLineEdit.text(), self.approvalNumLineEdit.text(), int(self.quantityLineEdit.text()),  float(self.pricePerUnitLineEdit.text()), float(self.MJHRLineEdit.text()), float(self.discountLineEdit.text()))
+        self.entry = Entry.Entry(self.additionalLineEdit.text(), self.productLineEdit.text(), self.modelLineEdit.text(), self.dimensionXLineEdit.text(), self.dimensionYLineEdit.text(), self.dimensionZLineEdit.text(), self.approvalNumLineEdit.text(), int(self.quantityLineEdit.text()),  float(self.pricePerUnitLineEdit.text()), float(self.MJHRLineEdit.text()), float(self.discountLineEdit.text()), self.preOwnedComboBox.currentText(), self.providedComboBox.currentText())
         super().close()
 
     def closeEvent(self, event):
