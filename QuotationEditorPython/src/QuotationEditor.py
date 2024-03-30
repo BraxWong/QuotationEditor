@@ -71,10 +71,12 @@ class QuotationEditor(QtWidgets.QWidget):
         self.dimensionsLayout.addWidget(self.dimensionZLineEdit)
 
         self.discountLabel = QtWidgets.QLabel("香港中華煤氣有限公司(尊貴客戶)優惠")
-        self.discountLineEdit = QtWidgets.QLineEdit()
+        self.discountComboBox = QtWidgets.QComboBox()
+        self.discountComboBox.addItems(["Yes", "No"])
         self.discountLayout = QtWidgets.QHBoxLayout()
+
         self.discountLayout.addWidget(self.discountLabel)
-        self.discountLayout.addWidget(self.discountLineEdit)
+        self.discountLayout.addWidget(self.discountComboBox)
 
         self.preOwnedLabel = QtWidgets.QLabel("客戶現有爐具")
         self.preOwnedComboBox = QtWidgets.QComboBox()
@@ -114,7 +116,7 @@ class QuotationEditor(QtWidgets.QWidget):
 #                        ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
 
     def completeEdit(self):
-        self.entry = Entry.Entry(self.additionalLineEdit.text(), self.productLineEdit.text(), self.modelLineEdit.text(), self.dimensionXLineEdit.text(), self.dimensionYLineEdit.text(), self.dimensionZLineEdit.text(), self.approvalNumLineEdit.text(), int(self.quantityLineEdit.text()),  float(self.pricePerUnitLineEdit.text()), float(self.MJHRLineEdit.text()), float(self.discountLineEdit.text()), self.preOwnedComboBox.currentText(), self.providedComboBox.currentText())
+        self.entry = Entry.Entry(self.additionalLineEdit.text(), self.productLineEdit.text(), self.modelLineEdit.text(), self.dimensionXLineEdit.text(), self.dimensionYLineEdit.text(), self.dimensionZLineEdit.text(), self.approvalNumLineEdit.text(), int(self.quantityLineEdit.text()),  float(self.pricePerUnitLineEdit.text()), float(self.MJHRLineEdit.text()), self.discountComboBox.currentText(), self.preOwnedComboBox.currentText(), self.providedComboBox.currentText())
         super().close()
 
     def closeEvent(self, event):

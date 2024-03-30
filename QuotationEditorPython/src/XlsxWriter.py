@@ -11,6 +11,8 @@ class XlsxWriter:
         self.total = 0
         self.row = 0
         self.itemCount = 1 
+        if ".xlsx" not in self.orderDetails.fileName:
+            self.orderDetails.fileName = self.orderDetails.fileName + ".xlsx"
         self.workbook = xlsxwriter.Workbook(self.orderDetails.fileName)
         self.worksheet = self.workbook.add_worksheet()
         self.worksheet.set_paper(9)
@@ -29,17 +31,17 @@ class XlsxWriter:
         merge_format5 = self.createFormat(self.workbook, 11, 'Calibri (Body)', False)
         merge_format5.set_align("left")
         underline_format = self.workbook.add_format({
-        'bottom': 1,  # Set a bottom border
-        'bottom_color': 'black',  # Set the bottom border color to black
+        'bottom': 1,  
+        'bottom_color': 'black',  
         'align': 'center'
         })
-        underline_format.set_bottom(2)  # Set the bottom border style to underline
+        underline_format.set_bottom(2)  
         underline_format.set_align("vcenter")
         underline_format2 = self.workbook.add_format({
-        'bottom': 1,  # Set a bottom border
-        'bottom_color': 'black',  # Set the bottom border color to black
+        'bottom': 1,  
+        'bottom_color': 'black',  
         })
-        underline_format2.set_bottom(2)  # Set the bottom border style to underline
+        underline_format2.set_bottom(2)  
         underline_format2.set_align("left")
 
 
@@ -144,7 +146,7 @@ class XlsxWriter:
             self.worksheet.write_string(self.row, 1, "型號:" + self.entry[currentIndex].modelName + ",批核編號(" + self.entry[currentIndex].approveNumber + ")", merge_format)
             self.row += 1
             self.worksheet.write_string(self.row, 1, self.entry[currentIndex].dimensionX + "X" + self.entry[currentIndex].dimensionY + "X" + self.entry[currentIndex].dimensionZ + "H", merge_format)
-            if self.entry[currentIndex].discount:
+            if self.entry[currentIndex].discount == "Yes":
                 self.row += 1
                 self.worksheet.write_string(self.row, 1, "香港中華煤氣有限公司(尊貴客戶)優惠", merge_format)
                 self.worksheet.write_number(self.row , 2, int(self.entry[currentIndex].quantity), merge_format2)
@@ -213,10 +215,10 @@ class XlsxWriter:
         self.worksheet.merge_range(self.row, 4, self.row, 5, '中天廚房設備有限公司')
         self.row += 5
         underline_format2 = self.workbook.add_format({
-                            'bottom': 1,  # Set a bottom border
-                            'bottom_color': 'black',  # Set the bottom border color to black
+                            'bottom': 1,  
+                            'bottom_color': 'black',  
                             })
-        underline_format2.set_bottom(2)  # Set the bottom border style to underline
+        underline_format2.set_bottom(2)  
         self.worksheet.write_string(self.row, 1, '', underline_format2)
         self.worksheet.merge_range(self.row, 4, self.row, 5, '', underline_format2)
 
