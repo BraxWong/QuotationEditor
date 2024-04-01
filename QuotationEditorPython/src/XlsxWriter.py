@@ -51,6 +51,7 @@ class XlsxWriter:
         self.worksheet.set_column('E:E', 14)
         self.worksheet.set_column('F:F', 14)
         self.worksheet.set_row(0, 30)
+        self.worksheet.insert_image(self.row, 0, 'img.png', {"x_scale": 0.2, "y_scale": 0.2})
         self.worksheet.merge_range(self.row, 0, self.row, 6, '中天廚房設備有限公司', merge_format)
         self.row += 1
         self.worksheet.merge_range(self.row, 0, self.row, 6, 'CHUNG TIN KITCHEN WARES COMPANY LIMITED', merge_format2)
