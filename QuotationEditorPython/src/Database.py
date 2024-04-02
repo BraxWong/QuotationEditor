@@ -1,5 +1,6 @@
-from PySide6 import QtWidgets
+from PySide6 import QtWidgets, QtCore
 import utils
+import json
 
 class database(QtWidgets.QWidget):
     
@@ -58,16 +59,44 @@ class database(QtWidgets.QWidget):
 
         self.submitButton = QtWidgets.QPushButton("完成")
         self.submitButton.clicked.connect(self.checkItemInDatabase)
+        self.closeButton = QtWidgets.QPushButton("關閉")
+        self.closeButton.clicked.connect(self.closeDatabaseEditor)
+        self.buttonLayout = QtWidgets.QHBoxLayout()
+        self.buttonLayout.addWidget(self.submitButton)
+        self.buttonLayout.addWidget(self.closeButton)
         self.mainLayout = QtWidgets.QVBoxLayout()
         self.mainLayout.addWidget(self.addNewItemLabel, 0, QtCore.Qt.AlignTop | QtCore.Qt.AlignHCenter)
         utils.addLayoutsToMainLayout(self.mainLayout, [self.productLayout, self.pricePerUnitLayout, self.MJHRLayout, self.modelLayout, self.approvalNumLayout, self.dimensionsLayout])
-        self.mainLayout.addWidget(self.submitButton, 0, QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter)
+        self.mainLayout.addLayout(self.buttonLayout)
 
         self.setLayout(self.mainLayout)
 
 
-
     def checkItemInDatabase(self):
+        self.getItemsFromJson()
         return True
 
-    
+    def getItemsFromJson(self):
+        with open("database.json",'r+') as file:
+            file_data = json.load(file)
+            file_data["items"].append({"product name": self.productLineEdit.text() , 
+                                       "price per unit": self.pricePerUnitLineEdit.text(), 
+                                       "MJ/HR": self.MJHRLineEdit.text(), 
+                                       "model": self.modelLineEdit.text(), 
+                                       "approval number": self.approvalNumLineEdit.text(),
+                                       "dimension x": self.dimensionXLineEdit.text(),
+                                       "dimension y": self.dimensionXLineEdit.text(),
+                                       "dimension z": self.dimensionZLineEdit.text()})
+            file.seek(0)
+            json.dump(file_data, file, indent = 2)
+        self.productLineEdit.setText("")
+        self.pricePerUnitLineEdit.setText("")
+        self.MJHRLineEdit.setText("")
+        self.modelLineEdit.setText("")
+        self.approvalNumLineEdit.setText("")
+        self.dimensionXLineEdit.setText("")
+        self.dimensionYLineEdit.setText("")
+        self.dimensionZLineEdit.setText("")
+
+    def closeDatabaseEditor(self): 
+        super().close()

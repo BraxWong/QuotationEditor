@@ -1,5 +1,6 @@
 from PySide6 import QtCore, QtWidgets
 from CustomerDetails import CustomerDetails
+from Database import database
 import sys
 
 class MainMenu(QtWidgets.QMainWindow):
@@ -14,6 +15,7 @@ class MainMenu(QtWidgets.QMainWindow):
         self.exitApplicationButton.clicked.connect(self.exitApplication)
         
         self.modifyDatabaseButton = QtWidgets.QPushButton("改數據庫")
+        self.modifyDatabaseButton.clicked.connect(self.openDatabaseEditor)
         
         self.text = QtWidgets.QLabel("中天廚房設備有限公司報價單編輯器",alignment=QtCore.Qt.AlignCenter)
         self.text.setStyleSheet(''' font-size: 30px; ''')
@@ -37,4 +39,8 @@ class MainMenu(QtWidgets.QMainWindow):
         self.customerDetails.resize(800, 600)
         self.customerDetails.show()
 
+    def openDatabaseEditor(self):
+        self.database = database()
+        self.database.resize(800, 400)
+        self.database.show()
 
