@@ -73,11 +73,26 @@ class database(QtWidgets.QWidget):
 
 
     def checkItemInDatabase(self):
+        with open("database.json", "r+", encoding='utf-8') as file:
+            file_data = json.load(file)
+            for item in file_data["items"]:
+                if item["product name"] == self.productLineEdit.text():
+                    item["product name"] = self.productLineEdit.text()
+                    item["price per unit"] = self.pricePerUnitLineEdit.text()
+                    item["MJ/HR"] = self.MJHRLineEdit.text()
+                    item["model"] = self.modelLineEdit.text()
+                    item["approval number"] = self.approvalNumLineEdit.text()
+                    item["dimension x"] = self.dimensionXLineEdit.text()
+                    item["dimension y"] = self.dimensionYLineEdit.text()
+                    item["dimension z"] = self.dimensionZLineEdit.text()
+                    file.seek(0)
+                    json.dump(file_data, file, indent = 2, ensure_ascii=False)
+                    self.resetDatabaseUserInput()
+                    return
         self.getItemsFromJson()
-        return True
 
     def getItemsFromJson(self):
-        with open("database.json",'r+') as file:
+        with open("database.json",'r+', encoding='utf-8') as file:
             file_data = json.load(file)
             file_data["items"].append({"product name": self.productLineEdit.text() , 
                                        "price per unit": self.pricePerUnitLineEdit.text(), 
@@ -88,7 +103,10 @@ class database(QtWidgets.QWidget):
                                        "dimension y": self.dimensionXLineEdit.text(),
                                        "dimension z": self.dimensionZLineEdit.text()})
             file.seek(0)
-            json.dump(file_data, file, indent = 2)
+            json.dump(file_data, file, indent = 2, ensure_ascii=False)
+        self.resetDatabaseUserInput()        
+
+    def resetDatabaseUserInput(self):
         self.productLineEdit.setText("")
         self.pricePerUnitLineEdit.setText("")
         self.MJHRLineEdit.setText("")
