@@ -1,7 +1,7 @@
 from PySide6 import QtWidgets, QtCore
-import sys
 import utils
 import Entry
+import json
 
 class QuotationEditor(QtWidgets.QWidget):
     editorClosed = QtCore.Signal(object)
@@ -106,9 +106,20 @@ class QuotationEditor(QtWidgets.QWidget):
 
         self.setLayout(self.mainLayout)
 
-
     def verifyItem(self):
-        sys.exit()
+        with open("database.json", "+r", encoding="utf-8") as file:
+            file_data = json.load(file)
+            for item in file_data["items"]:
+                if self.productLineEdit.text() == item["product name"]:
+                    self.pricePerUnitLineEdit.setText(item["price per unit"])
+                    self.MJHRLineEdit.setText(item["MJ/HR"])
+                    self.modelLineEdit.setText(item["model"])
+                    self.approvalNumLineEdit.setText(item["approval number"])
+                    self.dimensionXLineEdit.setText(item["dimension x"])
+                    self.dimensionYLineEdit.setText(item["dimension y"])
+                    self.dimensionZLineEdit.setText(item["dimension z"])
+                    file.seek(0)
+                    return
 #                        ╭━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╮
 #                        ┃                               ┃
 #                        ┃ TODO: Create a Database class ┃
