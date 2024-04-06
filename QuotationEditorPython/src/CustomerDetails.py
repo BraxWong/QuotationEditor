@@ -71,7 +71,8 @@ class CustomerDetails(QtWidgets.QWidget):
         self.entryList.append(entry)
 
     def writeToFile(self):
-        self.orderDetails = OrderDetails.OrderDetails(self.customerNameLineEdit.text(), self.customerAddrLineEdit.text(), self.supervisorLineEdit.text(), self.quotationIDLineEdit.text(), self.staffLineEdit.text(), self.fileNameLineEdit.text(), int(self.customerTelLineEdit.text()), self.customerIDLineEdit.text())
-        self.xlsxWriter = XlsxWriter.XlsxWriter(self.entryList, self.orderDetails)
-        self.xlsxWriter.writeToXlsx()
-        super().close()
+        if self.fileNameLineEdit.text() != "":
+            self.orderDetails = OrderDetails.OrderDetails(self.customerNameLineEdit.text(), self.customerAddrLineEdit.text(), self.supervisorLineEdit.text(), self.quotationIDLineEdit.text(), self.staffLineEdit.text(), self.fileNameLineEdit.text(), int(self.customerTelLineEdit.text()), self.customerIDLineEdit.text())
+            self.xlsxWriter = XlsxWriter.XlsxWriter(self.entryList, self.orderDetails)
+            self.xlsxWriter.writeToXlsx()
+            super().close()
