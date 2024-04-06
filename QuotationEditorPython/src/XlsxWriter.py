@@ -16,6 +16,7 @@ class XlsxWriter:
         self.workbook = xlsxwriter.Workbook(self.orderDetails.fileName)
         self.worksheet = self.workbook.add_worksheet()
         self.worksheet.set_paper(9)
+        self.worksheet.fit_to_pages(1, 0)
 
     def writeToXlsx(self):
         merge_format = self.createFormat(self.workbook, 22, '標楷體', True)
