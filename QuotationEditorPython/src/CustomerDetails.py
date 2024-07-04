@@ -73,6 +73,15 @@ class CustomerDetails(QtWidgets.QWidget):
     def writeToFile(self):
         if self.fileNameLineEdit.text() != "":
             self.orderDetails = OrderDetails.OrderDetails(self.customerNameLineEdit.text(), self.customerAddrLineEdit.text(), self.supervisorLineEdit.text(), self.quotationIDLineEdit.text(), self.staffLineEdit.text(), self.fileNameLineEdit.text(), int(self.customerTelLineEdit.text()), self.customerIDLineEdit.text())
-            self.xlsxWriter = XlsxWriter.XlsxWriter(self.entryList, self.orderDetails)
+            directory = self.openFilePicker()
+            self.xlsxWriter = XlsxWriter.XlsxWriter(self.entryList, self.orderDetails, directory)
             self.xlsxWriter.writeToXlsx()
             super().close()
+                    
+    def openFilePicker(self):
+        dialog = QtWidgets.QFileDialog(self)
+        dialog.setFileMode(QtWidgets.QFileDialog.Directory)
+        dialog.setOption(QtWidgets.QFileDialog.ShowDirsOnly, True)
+        if dialog.exec():
+            return dialog.selectedFiles()[0] + "/"
+        return ""

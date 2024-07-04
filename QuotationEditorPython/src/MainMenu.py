@@ -6,6 +6,7 @@ import sys
 class MainMenu(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
+
         self.setWindowTitle("中天廚房設備有限公司報價單編輯器")
 
         self.newQuotationButton = QtWidgets.QPushButton("新報價單")

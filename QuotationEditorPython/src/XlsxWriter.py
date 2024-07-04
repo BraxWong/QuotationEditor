@@ -2,9 +2,10 @@ import xlsxwriter
 from datetime import date
 
 class XlsxWriter:
-    def __init__(self, entry, orderDetails) -> None:
+    def __init__(self, entry, orderDetails, savingDirectory) -> None:
         self.entry = entry
         self.orderDetails = orderDetails
+        self.orderDetails.fileName = savingDirectory + self.orderDetails.fileName
         self.total = 0
         self.totalDiscount = 0
         self.totalMJHR = 0
@@ -13,6 +14,7 @@ class XlsxWriter:
         self.itemCount = 1 
         if ".xlsx" not in self.orderDetails.fileName:
             self.orderDetails.fileName = self.orderDetails.fileName + ".xlsx"
+        print(self.orderDetails.fileName)
         self.workbook = xlsxwriter.Workbook(self.orderDetails.fileName)
         self.worksheet = self.workbook.add_worksheet()
         self.worksheet.set_paper(9)
