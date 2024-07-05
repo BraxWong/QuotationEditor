@@ -1,6 +1,6 @@
 from PySide6 import QtCore, QtWidgets
 from CustomerDetails import CustomerDetails
-from Database import database
+from DatabaseScreen import DatabaseScreen
 import sys
 
 class MainMenu(QtWidgets.QMainWindow):
@@ -41,7 +41,7 @@ class MainMenu(QtWidgets.QMainWindow):
         self.customerDetails.show()
 
     def openDatabaseEditor(self):
-        self.database = database()
+        self.database = DatabaseScreen()
         self.database.resize(800, 400)
         self.database.show()
 
