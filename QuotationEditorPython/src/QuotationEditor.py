@@ -2,12 +2,14 @@ from PySide6 import QtWidgets, QtCore
 import utils
 import Entry
 import json
+import Database
 
 class QuotationEditor(QtWidgets.QWidget):
     editorClosed = QtCore.Signal(object)
 
     def __init__(self):
         super().__init__()
+        self.database = Database.Database()
         self.entry = None
 
         self.addNewItemLabel = QtWidgets.QLabel("添加新物品")
@@ -107,24 +109,15 @@ class QuotationEditor(QtWidgets.QWidget):
         self.setLayout(self.mainLayout)
 
     def verifyItem(self):
-        with open("database.json", "+r", encoding="utf-8") as file:
-            file_data = json.load(file)
-            for item in file_data["items"]:
-                if self.productLineEdit.text() == item["product name"]:
-                    self.pricePerUnitLineEdit.setText(item["price per unit"])
-                    self.MJHRLineEdit.setText(item["MJ/HR"])
-                    self.modelLineEdit.setText(item["model"])
-                    self.approvalNumLineEdit.setText(item["approval number"])
-                    self.dimensionXLineEdit.setText(item["dimension x"])
-                    self.dimensionYLineEdit.setText(item["dimension y"])
-                    self.dimensionZLineEdit.setText(item["dimension z"])
-                    file.seek(0)
-                    return
-#                        ╭━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╮
-#                        ┃                               ┃
-#                        ┃ TODO: Create a Database class ┃
-#                        ┃                               ┃
-#                        ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
+        entry = self.database.getEntryByProductName(self.productLineEdit.text())
+        if entry != None:
+            self.pricePerUnitLineEdit.setText(entry.price)
+            self.MJHRLineEdit.setText(str(entry.MJHR))
+            self.modelLineEdit.setText(entry.modelName)
+            self.approvalNumLineEdit.setText(entry.approveNumber)
+            self.dimensionXLineEdit.setText(entry.dimensionX)
+            self.dimensionYLineEdit.setText(entry.dimensionY)
+            self.dimensionZLineEdit.setText(entry.dimensionZ)
 
     def completeEdit(self):
         if self.productLineEdit.text() != "":

@@ -13,7 +13,7 @@ class Database:
                   The data regarding that product will be updated within the database.
                   If not, do nothing.
     """
-    
+
     def updateItemInDatabase(self, entry):
         with open(self.databasePath, "r+", encoding='utf-8') as file:
             file_data = json.load(file)
@@ -49,4 +49,17 @@ class Database:
                                     "dimension y": entry.dimensionY,
                                     "dimension z": entry.dimensionZ})
             file.seek(0)
-            json.dump(file_data, file, indent = 2, ensure_ascii=False)         
+            json.dump(file_data, file, indent = 2, ensure_ascii=False)   
+
+    def getEntryByProductName(self, productName):     
+        with open("database.json", "+r", encoding="utf-8") as file:
+            file_data = json.load(file)
+            for item in file_data["items"]:
+                if productName == item["product name"]:
+                    entry = Entry.Entry(None, "", item["model"], item["dimension x"],
+                                        item["dimension y"], item["dimension z"],
+                                        item["approval number"], None, item["price per unit"],
+                                        item["MJ/HR"], False, False, False)
+                    file.seek(0)
+                    return entry
+        return None

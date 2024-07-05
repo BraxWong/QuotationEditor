@@ -1,6 +1,5 @@
 from PySide6 import QtWidgets, QtCore
 import utils
-import json
 import Entry
 import Database
 
@@ -83,9 +82,9 @@ class DatabaseScreen(QtWidgets.QWidget):
         if self.database.checkItemInDatabase(entry):
             self.database.updateItemInDatabase(entry)
             self.resetDatabaseUserInput()
-            return
-        self.database.addItemToDatabase(entry)
-        self.resetDatabaseUserInput()
+        else:
+            self.database.addItemToDatabase(entry)
+            self.resetDatabaseUserInput()
 
     def resetDatabaseUserInput(self):
         self.productLineEdit.setText("")
