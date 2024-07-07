@@ -1,7 +1,6 @@
 from PySide6 import QtWidgets, QtCore
 import utils
 import Entry
-import json
 import Database
 
 class QuotationEditor(QtWidgets.QWidget):
@@ -122,6 +121,10 @@ class QuotationEditor(QtWidgets.QWidget):
     def completeEdit(self):
         if self.productLineEdit.text() != "":
             self.entry = Entry.Entry(self.additionalLineEdit.text(), self.productLineEdit.text(), self.modelLineEdit.text(), self.dimensionXLineEdit.text(), self.dimensionYLineEdit.text(), self.dimensionZLineEdit.text(), self.approvalNumLineEdit.text(), int(self.quantityLineEdit.text()),  float(self.pricePerUnitLineEdit.text()), float(self.MJHRLineEdit.text()), self.discountComboBox.currentText(), self.preOwnedComboBox.currentText(), self.providedComboBox.currentText())
+            if self.database.checkItemInDatabase(self.entry):
+                self.database.updateItemInDatabase(self.entry)
+            else:
+                self.database.addItemToDatabase(self.entry)
             super().close()
 
     def closeEvent(self, event):
