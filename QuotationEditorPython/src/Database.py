@@ -1,5 +1,6 @@
 import json
 import Entry
+import OrderDetails
 
 class Database:
 
@@ -111,4 +112,18 @@ class Database:
         
         with open(self.customerDatabasePath, 'w', encoding='utf-8') as file:
                 json.dump(file_data, file, indent = 2, ensure_ascii=False)
+
+    def getCustomerByCustomerName(self, customerName):     
+        with open(self.customerDatabasePath, "+r", encoding="utf-8") as file:
+            file_data = json.load(file)
+            for entry in file_data["customers"]:
+                if customerName == entry["customer name"]:
+                    customer = OrderDetails.OrderDetails(entry["customer name"], entry["address"],
+                                                         entry["supervisor"], None,
+                                                         None, None,
+                                                         entry["telephone number"], entry["customer id"]
+                    )
+                    file.seek(0)
+                    return customer
+        return None
 

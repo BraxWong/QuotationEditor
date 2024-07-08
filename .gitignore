@@ -3,3 +3,4 @@ QuotationEditorPython/src/dist
 .DS_Store
 QuotationEditorPython/src/database.json
 QuotationEditorPython/src/__pycache__
+QuotationEditorPython/src/customer.json

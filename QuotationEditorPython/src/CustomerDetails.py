@@ -97,4 +97,9 @@ class CustomerDetails(QtWidgets.QWidget):
         return ""
     
     def verifyItem(self):
-        print("Do Nothing For Now.")
+        customer = self.database.getCustomerByCustomerName(self.customerNameLineEdit.text())
+        if customer != None:
+            self.customerAddrLineEdit.setText(customer.customerAddr)
+            self.customerIDLineEdit.setText(customer.customerID)
+            self.customerTelLineEdit.setText(str(customer.customerTel))
+            self.supervisorLineEdit.setText(customer.supervisor)
