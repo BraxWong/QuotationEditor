@@ -3,10 +3,13 @@ from QuotationEditor import QuotationEditor
 import utils
 import OrderDetails
 import XlsxWriter
+import Database
 
 class CustomerDetails(QtWidgets.QWidget):
     def __init__(self) :
         super().__init__()
+
+        self.database = Database.Database()
 
         self.entryList = [] 
         self.fileNameLabel = QtWidgets.QLabel("檔案名稱")
@@ -16,8 +19,12 @@ class CustomerDetails(QtWidgets.QWidget):
 
         self.customerNameLabel = QtWidgets.QLabel("客戶名稱")
         self.customerNameLineEdit = QtWidgets.QLineEdit()
+        self.customerCheckButton = QtWidgets.QPushButton("查對")
+        self.customerCheckButton.clicked.connect(self.verifyItem)
         self.customerNameLayout = QtWidgets.QHBoxLayout()
-        utils.widgetConfig(self.customerNameLabel, self.customerNameLineEdit, self.customerNameLayout)
+        self.customerNameLayout.addWidget(self.customerNameLabel)
+        self.customerNameLayout.addWidget(self.customerNameLineEdit)
+        self.customerNameLayout.addWidget(self.customerCheckButton)
 
         self.customerAddrLabel = QtWidgets.QLabel("客戶地址")
         self.customerAddrLineEdit = QtWidgets.QLineEdit()
@@ -74,9 +81,12 @@ class CustomerDetails(QtWidgets.QWidget):
         if self.fileNameLineEdit.text() != "":
             self.orderDetails = OrderDetails.OrderDetails(self.customerNameLineEdit.text(), self.customerAddrLineEdit.text(), self.supervisorLineEdit.text(), self.quotationIDLineEdit.text(), self.staffLineEdit.text(), self.fileNameLineEdit.text(), int(self.customerTelLineEdit.text()), self.customerIDLineEdit.text())
             directory = self.openFilePicker()
-            self.xlsxWriter = XlsxWriter.XlsxWriter(self.entryList, self.orderDetails, directory)
-            self.xlsxWriter.writeToXlsx()
-            super().close()
+            if directory != "":
+                self.xlsxWriter = XlsxWriter.XlsxWriter(self.entryList, self.orderDetails, directory)
+                self.xlsxWriter.writeToXlsx()
+                if not self.database.customerInDatabase(self.orderDetails):
+                    self.database.addCustomerToDatabase(self.orderDetails)
+                super().close()
                     
     def openFilePicker(self):
         dialog = QtWidgets.QFileDialog(self)
@@ -85,3 +95,6 @@ class CustomerDetails(QtWidgets.QWidget):
         if dialog.exec():
             return dialog.selectedFiles()[0] + "/"
         return ""
+    
+    def verifyItem(self):
+        print("Do Nothing For Now.")

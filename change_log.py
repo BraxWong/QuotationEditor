@@ -10,5 +10,8 @@ Change Log
 * ** Version 1.1.0 (7/7/2024):
    * Added: When an unregistered item has been added to the spreadsheet, it will be added to the database for 
             future usage.
-
+* ** Version 1.2.0 (8/7/2024):
+   * Added: When an unregistered customer has been added to the spreadsheet, it will be added to the database for 
+            future usage.
+            
 """

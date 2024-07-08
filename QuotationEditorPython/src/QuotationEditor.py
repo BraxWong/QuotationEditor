@@ -110,7 +110,7 @@ class QuotationEditor(QtWidgets.QWidget):
     def verifyItem(self):
         entry = self.database.getEntryByProductName(self.productLineEdit.text())
         if entry != None:
-            self.pricePerUnitLineEdit.setText(entry.price)
+            self.pricePerUnitLineEdit.setText(str(entry.price))
             self.MJHRLineEdit.setText(str(entry.MJHR))
             self.modelLineEdit.setText(entry.modelName)
             self.approvalNumLineEdit.setText(entry.approveNumber)
@@ -121,9 +121,7 @@ class QuotationEditor(QtWidgets.QWidget):
     def completeEdit(self):
         if self.productLineEdit.text() != "":
             self.entry = Entry.Entry(self.additionalLineEdit.text(), self.productLineEdit.text(), self.modelLineEdit.text(), self.dimensionXLineEdit.text(), self.dimensionYLineEdit.text(), self.dimensionZLineEdit.text(), self.approvalNumLineEdit.text(), int(self.quantityLineEdit.text()),  float(self.pricePerUnitLineEdit.text()), float(self.MJHRLineEdit.text()), self.discountComboBox.currentText(), self.preOwnedComboBox.currentText(), self.providedComboBox.currentText())
-            if self.database.checkItemInDatabase(self.entry):
-                self.database.updateItemInDatabase(self.entry)
-            else:
+            if not self.database.checkItemInDatabase(self.entry):
                 self.database.addItemToDatabase(self.entry)
             super().close()
 
