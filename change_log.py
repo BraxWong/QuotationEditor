@@ -16,4 +16,7 @@ Change Log
 * ** Version 1.3.0 (8/7/2024):
    * Added: Customer's detail will be automatically filled if it exists within the database when editing a spreadsheet
             
+* ** Version 1.3.1 (9/7/2024):
+   * Added: Implemented PopUpWindow class that can be used to display error messages
+   
 """
