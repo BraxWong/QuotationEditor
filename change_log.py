@@ -19,4 +19,7 @@ Change Log
 * ** Version 1.3.1 (9/7/2024):
    * Added: Implemented PopUpWindow class that can be used to display error messages
    
+* ** Version 1.4.0 (11/7/2024):
+   * Added: PopUpWindow is now used to display error message.
+
 """

@@ -2,12 +2,14 @@ from PySide6 import QtWidgets, QtCore
 import utils
 import Entry
 import Database
+import PopUpWindow
 
 class DatabaseScreen(QtWidgets.QWidget):
     
     def __init__(self):
         super().__init__()
         self.database = Database.Database()
+        self.popUp = None
         self.addNewItemLabel = QtWidgets.QLabel("添加新物品")
 
         self.pricePerUnitLabel = QtWidgets.QLabel("單價")
@@ -74,17 +76,18 @@ class DatabaseScreen(QtWidgets.QWidget):
 
 
     def updateItemInDatabase(self):
-        entry = Entry.Entry(None, self.productLineEdit.text(), self.modelLineEdit.text(),
-                      self.dimensionXLineEdit.text(), self.dimensionYLineEdit.text(),
-                      self.dimensionZLineEdit.text(), self.approvalNumLineEdit.text(),
-                      None, self.pricePerUnitLineEdit.text(), float(self.MJHRLineEdit.text()),
-                      False, False, False)
-        if self.database.checkItemInDatabase(entry):
-            self.database.updateItemInDatabase(entry)
-            self.resetDatabaseUserInput()
-        else:
-            self.database.addItemToDatabase(entry)
-            self.resetDatabaseUserInput()
+        if self.inputValidation():
+            entry = Entry.Entry(None, self.productLineEdit.text(), self.modelLineEdit.text(),
+                            self.dimensionXLineEdit.text(), self.dimensionYLineEdit.text(),
+                            self.dimensionZLineEdit.text(), self.approvalNumLineEdit.text(),
+                            None, self.pricePerUnitLineEdit.text(), float(self.MJHRLineEdit.text()),
+                            False, False, False)
+            if self.database.checkItemInDatabase(entry):
+                self.database.updateItemInDatabase(entry)
+                self.resetDatabaseUserInput()
+            else:
+                self.database.addItemToDatabase(entry)
+                self.resetDatabaseUserInput()
 
     def resetDatabaseUserInput(self):
         self.productLineEdit.setText("")
@@ -98,3 +101,27 @@ class DatabaseScreen(QtWidgets.QWidget):
 
     def closeDatabaseEditor(self): 
         super().close()
+
+    def inputValidation(self):
+        errorMessages= []
+        if self.pricePerUnitLineEdit.text() == "":
+            errorMessages.append("Please provide the price per unit.")
+        if self.MJHRLineEdit.text() == "":
+            errorMessages.append("Please provide the MJ/HR value.")
+        if self.productLineEdit.text() == "":
+            errorMessages.append("Please provide tha name of the product.")
+        if self.modelLineEdit.text() == "":
+            errorMessages.append("Please provide the name of the model.")
+        if self.approvalNumLineEdit.text() == "":
+            errorMessages.append("Please provide the approval number.")
+        if self.dimensionXLineEdit.text() == "":
+            errorMessages.append("Please provide the X dimension value.")
+        if self.dimensionYLineEdit.text() == "":
+            errorMessages.append("Please provide the Y dimension value.")
+        if self.dimensionZLineEdit.text() == "":
+            errorMessages.append("Please provide the Z dimension value.")
+        if len(errorMessages) != 0:
+            self.popUp = PopUpWindow.PopUpWindow("Error: Missing input", errorMessages)
+            self.popUp.show()
+            return False
+        return True

@@ -4,13 +4,14 @@ import utils
 import OrderDetails
 import XlsxWriter
 import Database
+import PopUpWindow
 
 class CustomerDetails(QtWidgets.QWidget):
     def __init__(self) :
         super().__init__()
 
         self.database = Database.Database()
-
+        self.popUp = None
         self.entryList = [] 
         self.fileNameLabel = QtWidgets.QLabel("檔案名稱")
         self.fileNameLineEdit = QtWidgets.QLineEdit()
@@ -78,7 +79,7 @@ class CustomerDetails(QtWidgets.QWidget):
         self.entryList.append(entry)
 
     def writeToFile(self):
-        if self.fileNameLineEdit.text() != "":
+        if self.inputValidation():
             self.orderDetails = OrderDetails.OrderDetails(self.customerNameLineEdit.text(), self.customerAddrLineEdit.text(), self.supervisorLineEdit.text(), self.quotationIDLineEdit.text(), self.staffLineEdit.text(), self.fileNameLineEdit.text(), int(self.customerTelLineEdit.text()), self.customerIDLineEdit.text())
             directory = self.openFilePicker()
             if directory != "":
@@ -103,3 +104,30 @@ class CustomerDetails(QtWidgets.QWidget):
             self.customerIDLineEdit.setText(customer.customerID)
             self.customerTelLineEdit.setText(str(customer.customerTel))
             self.supervisorLineEdit.setText(customer.supervisor)
+        else:
+            self.popUp = PopUpWindow.PopUpWindow("Error", ["The customer is not in the database."])
+            self.popUp.show()
+
+    def inputValidation(self):
+        errorMessages = []
+        if self.fileNameLineEdit.text() == "":
+            errorMessages.append("Please provide a file name.")
+        if self.customerNameLineEdit.text() == "":
+            errorMessages.append("Please provide the customer's name.")
+        if self.customerAddrLineEdit.text() == "":
+            errorMessages.append("Please provide the customer's address.")
+        if self.supervisorLineEdit.text() == "":
+            errorMessages.append("Please provide the supervisor's name.")
+        if self.customerTelLineEdit.text() == "":
+            errorMessages.append("Please provide the customer's telephone number.")
+        if self.customerIDLineEdit.text() == "":
+            errorMessages.append("Please provide the customer's ID.")
+        if self.quotationIDLineEdit.text() == "":
+            errorMessages.append("Please provide the quotation ID.")
+        if self.staffLineEdit.text() == "":
+            errorMessages.append("Please provide the staff's name")
+        if len(errorMessages) != 0:
+            self.popUp = PopUpWindow.PopUpWindow("Error: Missing input", errorMessages)
+            self.popUp.show()
+            return False
+        return True

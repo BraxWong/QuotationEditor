@@ -2,6 +2,7 @@ from PySide6 import QtWidgets, QtCore
 import utils
 import Entry
 import Database
+import PopUpWindow
 
 class QuotationEditor(QtWidgets.QWidget):
     editorClosed = QtCore.Signal(object)
@@ -10,6 +11,7 @@ class QuotationEditor(QtWidgets.QWidget):
         super().__init__()
         self.database = Database.Database()
         self.entry = None
+        self.popUp = None
 
         self.addNewItemLabel = QtWidgets.QLabel("添加新物品")
 
@@ -117,9 +119,12 @@ class QuotationEditor(QtWidgets.QWidget):
             self.dimensionXLineEdit.setText(entry.dimensionX)
             self.dimensionYLineEdit.setText(entry.dimensionY)
             self.dimensionZLineEdit.setText(entry.dimensionZ)
+        else:
+            self.popUp = PopUpWindow.PopUpWindow("Error", ["The item is not in the database."])
+            self.popUp.show()
 
     def completeEdit(self):
-        if self.productLineEdit.text() != "":
+        if self.inputValidation():
             self.entry = Entry.Entry(self.additionalLineEdit.text(), self.productLineEdit.text(), self.modelLineEdit.text(), self.dimensionXLineEdit.text(), self.dimensionYLineEdit.text(), self.dimensionZLineEdit.text(), self.approvalNumLineEdit.text(), int(self.quantityLineEdit.text()),  float(self.pricePerUnitLineEdit.text()), float(self.MJHRLineEdit.text()), self.discountComboBox.currentText(), self.preOwnedComboBox.currentText(), self.providedComboBox.currentText())
             if not self.database.checkItemInDatabase(self.entry):
                 self.database.addItemToDatabase(self.entry)
@@ -128,3 +133,29 @@ class QuotationEditor(QtWidgets.QWidget):
     def closeEvent(self, event):
         self.editorClosed.emit(self.entry)  
         super().closeEvent(event)
+
+    def inputValidation(self):
+        errorMessages = []
+        if self.quantityLineEdit.text() == "":
+            errorMessages.append("Please provide the quantity.")
+        if self.pricePerUnitLineEdit.text() == "":
+            errorMessages.append("Please provide the price per unit.")
+        if self.MJHRLineEdit.text() == "":
+            errorMessages.append("Please provide the MJ/HR value.")
+        if self.modelLineEdit.text() == "":
+            errorMessages.append("Please provide the name of the model.")
+        if self.productLineEdit.text() == "":
+            errorMessages.append("Please provide the name of the product")
+        if self.approvalNumLineEdit.text() == "":
+            errorMessages.append("Please provide the approval number.")
+        if self.dimensionXLineEdit.text() == "":
+            errorMessages.append("Please provide the X dimension value.")
+        if self.dimensionYLineEdit.text() == "":
+            errorMessages.append("Please provide the Y dimension value.")
+        if self.dimensionZLineEdit.text() == "":
+            errorMessages.append("Please provide the Z dimension value.")
+        if len(errorMessages) != 0:
+            self.popUp = PopUpWindow.PopUpWindow("Error: Missing input", errorMessages)
+            self.popUp.show()
+            return False
+        return True

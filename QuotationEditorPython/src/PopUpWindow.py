@@ -4,7 +4,6 @@ class PopUpWindow(QtWidgets.QWidget):
 
     def __init__(self, popTitle, popUpMessages):
         super().__init__()
-
         self.popUpTitleLabel = QtWidgets.QLabel(popTitle)
         self.acknowledgeButton = QtWidgets.QPushButton("OK")
         self.acknowledgeButton.clicked.connect(self.closePopUpWindow)
@@ -17,7 +16,7 @@ class PopUpWindow(QtWidgets.QWidget):
         self.layout.addWidget(self.acknowledgeButton)
         self.setLayout(self.layout)
 
-        self.setFixedSize(QtCore.QSize(400,200))
+        self.setFixedSize(QtCore.QSize(400,400))
 
         
     def closePopUpWindow(self):
