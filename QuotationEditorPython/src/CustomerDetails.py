@@ -87,7 +87,10 @@ class CustomerDetails(QtWidgets.QWidget):
                 self.xlsxWriter.writeToXlsx()
                 if not self.database.customerInDatabase(self.orderDetails):
                     self.database.addCustomerToDatabase(self.orderDetails)
+                    self.popUp = PopUpWindow.PopUpWindow("Success", [f"The quotation file has been saved in {directory}","The customer info has been added to the database."])
                 super().close()
+            else:
+                self.popUp = PopUpWindow.PopUpWindow("Error", ["Please select a directory to save the quotation file."])
                     
     def openFilePicker(self):
         dialog = QtWidgets.QFileDialog(self)
@@ -106,7 +109,6 @@ class CustomerDetails(QtWidgets.QWidget):
             self.supervisorLineEdit.setText(customer.supervisor)
         else:
             self.popUp = PopUpWindow.PopUpWindow("Error", ["The customer is not in the database."])
-            self.popUp.show()
 
     def inputValidation(self):
         errorMessages = []
@@ -128,6 +130,5 @@ class CustomerDetails(QtWidgets.QWidget):
             errorMessages.append("Please provide the staff's name")
         if len(errorMessages) != 0:
             self.popUp = PopUpWindow.PopUpWindow("Error: Missing input", errorMessages)
-            self.popUp.show()
             return False
         return True

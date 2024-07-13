@@ -121,13 +121,13 @@ class QuotationEditor(QtWidgets.QWidget):
             self.dimensionZLineEdit.setText(entry.dimensionZ)
         else:
             self.popUp = PopUpWindow.PopUpWindow("Error", ["The item is not in the database."])
-            self.popUp.show()
 
     def completeEdit(self):
         if self.inputValidation():
             self.entry = Entry.Entry(self.additionalLineEdit.text(), self.productLineEdit.text(), self.modelLineEdit.text(), self.dimensionXLineEdit.text(), self.dimensionYLineEdit.text(), self.dimensionZLineEdit.text(), self.approvalNumLineEdit.text(), int(self.quantityLineEdit.text()),  float(self.pricePerUnitLineEdit.text()), float(self.MJHRLineEdit.text()), self.discountComboBox.currentText(), self.preOwnedComboBox.currentText(), self.providedComboBox.currentText())
             if not self.database.checkItemInDatabase(self.entry):
                 self.database.addItemToDatabase(self.entry)
+                self.popUp = PopUpWindow.PopUpWindow("Success", ["The product has been added to the database."])
             super().close()
 
     def closeEvent(self, event):
@@ -156,6 +156,5 @@ class QuotationEditor(QtWidgets.QWidget):
             errorMessages.append("Please provide the Z dimension value.")
         if len(errorMessages) != 0:
             self.popUp = PopUpWindow.PopUpWindow("Error: Missing input", errorMessages)
-            self.popUp.show()
             return False
         return True

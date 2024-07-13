@@ -5,8 +5,8 @@ import OrderDetails
 class Database:
 
     def __init__(self):
-        self.productDatabasePath = 'database.json'
-        self.customerDatabasePath = 'customer.json'
+        self.productDatabasePath = 'Database/database.json'
+        self.customerDatabasePath = 'Database/customer.json'
 
     """
     Product Database Section

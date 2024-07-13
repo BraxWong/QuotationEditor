@@ -86,12 +86,10 @@ class DatabaseScreen(QtWidgets.QWidget):
                 self.database.updateItemInDatabase(entry)
                 self.resetDatabaseUserInput()
                 self.popUp = PopUpWindow.PopUpWindow("Success", ["The product's values have been updated within the database."])
-                self.popUp.show()
             else:
                 self.database.addItemToDatabase(entry)
                 self.resetDatabaseUserInput()
                 self.popUp = PopUpWindow.PopUpWindow("Success", ["The product has been added to the database."])
-                self.popUp.show()
             
 
     def resetDatabaseUserInput(self):
@@ -127,6 +125,5 @@ class DatabaseScreen(QtWidgets.QWidget):
             errorMessages.append("Please provide the Z dimension value.")
         if len(errorMessages) != 0:
             self.popUp = PopUpWindow.PopUpWindow("Error: Missing input", errorMessages)
-            self.popUp.show()
             return False
         return True

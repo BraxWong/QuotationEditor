@@ -4,6 +4,7 @@ Change Log
 
 * ** Version 1.0.0 (5/7/2024):
    * Added: Allow users to choose where the excel file will be saved 
+   
 * ** Version 1.0.1 (6/7/2024):
    * Changed: Separated database related functions from DatabaseScreen.py as it 
               allows these functions to be used globally without triggering the database screen
@@ -21,5 +22,9 @@ Change Log
    
 * ** Version 1.4.0 (11/7/2024):
    * Added: PopUpWindow is now used to display error message.
+
+* ** Version 1.4.1 (13/7/2024):
+   * Modified: Doing self.show() in PopUpWindow's constructor to avoid calling show() in other places.
+               Added more pop up messages to indicate whether an operation was performed successfully.
 
 """
